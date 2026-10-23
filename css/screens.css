@@ -1,0 +1,286 @@
+/* Screen-specific layouts. Each class belongs to one screen or section.
+   Reusable visuals belong in components.css instead. */
+
+/* ---------- C1 Lock screen (dark phone background) ---------- */
+.phone.lock .statusbar .time{color:#fff}
+.phone.lock .statusbar .cluster span{background:#fff}
+.phone.lock .homeind::after{background:#fff}
+.screen.lock{background:#000; color:#fff}
+.screen.lock .main{display:flex; flex-direction:column; align-items:center; padding:30px 20px 20px}
+.lock-date{font-size:16px; font-weight:600; margin-top:6px; opacity:.95}
+.lock-time{font-size:76px; font-weight:600; line-height:1; letter-spacing:-.03em; margin-top:4px}
+.lock-notif{
+  margin-top:auto; width:100%; background:rgba(44,44,46,.92);
+  color:#fff; border-radius:16px; padding:12px 14px;
+  display:flex; flex-direction:column; gap:4px; text-align:left; cursor:pointer;
+  animation:notifIn 440ms var(--ease-out);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+}
+.lock-notif .top{display:flex; align-items:center; gap:8px; font-size:12px}
+.lock-notif .app{width:22px; height:22px; border-radius:5px; background:#fff; color:#000; display:grid; place-items:center; font-weight:800; font-size:12px}
+.lock-notif .app-name{font-weight:600; text-transform:uppercase; letter-spacing:.04em; flex:1}
+.lock-notif .ts{opacity:.65}
+.lock-notif .title{font-weight:700; font-size:15px}
+.lock-notif .body{font-size:14px; opacity:.92; line-height:19px}
+
+/* ---------- C2 Amenity tiles ---------- */
+.amen-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.amen{
+  background:var(--bg-card); border:1.5px solid var(--line); border-radius:var(--r-md);
+  padding:12px 8px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.amen .lbl{font-weight:700; font-size:14px; margin-top:2px}
+.amen .sub{font-size:12px; color:var(--ink-mute); line-height:16px}
+
+/* ---------- C4 Driver card plate chip ---------- */
+.drivercard .plate-dk{
+  background:var(--ink); color:#fff; border-radius:var(--r-sm);
+  padding:12px 14px; display:flex; align-items:center; gap:12px; margin-top:14px;
+}
+.drivercard .plate-dk .n{font-size:22px; font-weight:800; letter-spacing:.02em}
+.drivercard .plate-dk .sub{font-size:12px; opacity:.78; margin-top:2px}
+
+/* ---------- C5 Bay status bar ---------- */
+.bay-bar{
+  background:var(--ink); color:#fff; border-radius:var(--r-md);
+  padding:14px 16px; display:flex; align-items:center; gap:12px;
+}
+.bay-bar .texts{flex:1; min-width:0}
+.bay-bar .t1{font-weight:700; font-size:17px; line-height:22px}
+.bay-bar .t2{font-size:12px; color:rgba(255,255,255,.75); margin-top:3px; line-height:16px}
+.bay-bar .time{font-size:30px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+
+/* ---------- C5 Direction rows ---------- */
+.dir-row{display:flex; gap:14px; align-items:flex-start; padding:12px 20px}
+.dir-row + .dir-row{border-top:1px solid var(--line)}
+.dir-row .ico{width:36px; height:36px; border-radius:var(--r-sm); background:var(--bg-surface); display:grid; place-items:center; flex:none; color:var(--ink)}
+.dir-row .texts .t1{font-weight:700; font-size:17px; line-height:22px}
+.dir-row .texts .t2{color:var(--ink-mute); font-size:14px; margin-top:1px; line-height:18px}
+
+/* ---------- C6 Big yellow number plate ---------- */
+.plate-big{
+  background:var(--plate); color:#111; border-radius:var(--r-md);
+  padding:22px 16px 14px; text-align:center;
+  display:flex; flex-direction:column; gap:4px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.07);
+}
+.plate-big .n{font-size:40px; font-weight:800; letter-spacing:.02em; line-height:1}
+.plate-big .s{font-size:13px; opacity:.82}
+
+/* ---------- C6 Big code boxes (trip code) ---------- */
+.code-big{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+.code-big .box{aspect-ratio:1/1; background:var(--bg-surface); border-radius:var(--r-md); display:grid; place-items:center; font-size:44px; font-weight:800; letter-spacing:-.02em}
+
+/* ---------- C6 Bag chips ---------- */
+.bag-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.bag-chip{display:flex; align-items:center; gap:10px; padding:14px 12px; background:var(--bg-card); border:1.5px solid var(--line); border-radius:var(--r-md); font-weight:600; font-size:15px}
+.bag-chip .mark{width:22px; height:22px; border-radius:var(--r-xs); background:var(--ink); color:#fff; display:grid; place-items:center; flex:none}
+
+/* ---------- C7 Map ---------- */
+.map{
+  position:relative; width:100%; height:360px; background:var(--bg-surface);
+  overflow:hidden; border-bottom:1px solid var(--line);
+}
+.map::before{
+  content:""; position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right,  color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px);
+  background-size:52px 52px; opacity:.9;
+}
+.map .route{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+.map .dest{position:absolute; background:var(--bg-card); color:var(--ink); border-radius:var(--r-pill); padding:7px 12px; display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:14px; box-shadow:0 6px 16px rgba(0,0,0,.14); transform:translate(-50%,-50%)}
+.map .dot{position:absolute; width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; box-shadow:0 6px 16px rgba(0,0,0,.3); transform:translate(-50%,-50%)}
+
+/* ---------- C7 ETA badge ---------- */
+.eta{
+  background:var(--ink); color:#fff; border-radius:var(--r-md);
+  padding:9px 14px; display:inline-flex; flex-direction:column; align-items:center;
+  min-width:56px; line-height:1;
+}
+.eta .n{font-size:28px; font-weight:800; letter-spacing:-.02em}
+.eta .u{font-size:11px; margin-top:3px; opacity:.78; letter-spacing:.04em; text-transform:lowercase}
+
+.trip-card{display:flex; flex-direction:column; gap:14px; padding:16px 20px}
+
+/* ---------- C8 Bag check rows (sheet) ---------- */
+.bagcheck{display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-card); border:1.5px solid var(--line); border-radius:var(--r-md); cursor:pointer}
+.bagcheck + .bagcheck{margin-top:8px}
+.bagcheck.on{border-color:var(--ink); border-width:2px; padding:13px 15px}
+.bagcheck .mark{width:22px; height:22px; border-radius:var(--r-xs); background:var(--ink); color:#fff; display:grid; place-items:center; flex:none}
+.bagcheck .label{font-weight:600; font-size:17px; flex:1}
+
+/* ---------- C9 Rate your ride ---------- */
+.stars{display:flex; justify-content:center; gap:10px; margin:14px 0 6px}
+.stars button{padding:4px}
+.stars svg{width:34px; height:34px; color:var(--ink); fill:currentColor; stroke:currentColor; stroke-width:1; stroke-linejoin:round}
+.stars button[aria-pressed="false"] svg{fill:none; color:var(--line-strong)}
+.chips-grid{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:0 20px}
+
+/* ===== X-section (edge cases) ===== */
+/* Dialog with stacked buttons */
+.dialog .btns{display:flex; flex-direction:column; gap:8px; margin-top:4px}
+.dialog .btns > .btn, .dialog .btns > .btn-link{width:100%}
+.dialog .icon-head{display:flex; justify-content:center; margin-bottom:10px}
+.dialog .icon-head .circle{width:44px; height:44px; border-radius:50%; display:grid; place-items:center}
+
+.circle-err{background:var(--error-soft); color:var(--error)}
+.circle-ink{background:var(--ink); color:#fff}
+
+/* Amber paid-waiting bay-bar (X6) */
+.bay-bar.amber .time{color:var(--warning)}
+.bay-bar.amber .t2{color:#F2B04C}
+
+/* X7 Fare breakdown */
+.breakdown{background:var(--bg-surface); border-radius:var(--r-md); padding:14px 16px}
+.breakdown .ln{display:flex; justify-content:space-between; align-items:center; padding:8px 0}
+.breakdown .ln + .ln{border-top:1px solid var(--line)}
+.breakdown .ln .v{font-weight:600}
+.breakdown .ln.tot{padding-top:12px; margin-top:4px; border-top:1px solid var(--line-strong)}
+.breakdown .ln.tot .k, .breakdown .ln.tot .v{font-weight:800}
+
+/* X16 "Hub minimum fare" chip inline */
+.chip-minfare{display:inline-flex; align-items:center; height:22px; padding:0 10px; border-radius:var(--r-pill); background:var(--ink); color:#fff; font-size:12px; font-weight:600; margin-bottom:4px}
+
+/* X18 Dark offline banner */
+.banner.offline{background:var(--ink); color:#fff; align-items:center}
+.banner.offline .i{color:#fff}
+
+/* X10 / X11 / X12 big-icon header above sheet title */
+.sheet .big-ico{display:flex; justify-content:center; margin:4px 0 12px}
+.sheet .big-ico .circle{width:48px; height:48px; border-radius:50%; display:grid; place-items:center}
+
+/* X12 SOS primary */
+.btn.btn-sos{background:var(--ink); color:#fff}
+.btn.btn-sos:hover{background:#000}
+
+/* ===== Section 6: pooling, saved places ===== */
+.seg{display:flex; background:var(--bg-surface); border-radius:var(--r-lg); padding:4px; gap:2px; margin:0 20px}
+.seg .seg-tab{flex:1; height:36px; display:grid; place-items:center; border-radius:var(--r-md); font-size:14px; font-weight:600; color:var(--ink-mute); background:transparent; cursor:pointer; border:0}
+.seg .seg-tab.on{background:var(--bg-card); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+.corider{display:flex; align-items:center; gap:12px; padding:12px 20px}
+.corider .av{width:40px; height:40px; border-radius:50%; background:var(--bg-surface); display:grid; place-items:center; flex:none; color:var(--ink-mute)}
+.corider .av.me{background:var(--ink); color:#fff}
+.corider .texts{flex:1; min-width:0}
+.corider .texts .t1{font-weight:700; font-size:17px}
+.corider .texts .t2{color:var(--ink-mute); font-size:14px; margin-top:1px}
+.corider .chip-right{background:var(--bg-surface); border-radius:var(--r-pill); padding:5px 10px; font-size:12px; font-weight:600; color:var(--ink); flex:none}
+
+.farelines{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r-md); padding:4px 16px}
+.farelines .ln{display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px}
+.farelines .ln + .ln{border-top:1px solid var(--line)}
+.farelines .ln .k{color:var(--ink)}
+.farelines .ln .v{font-weight:700; color:var(--ink); text-align:right}
+.farelines .ln.hero .k{font-weight:700}
+.farelines .ln.hero .v{font-weight:800; font-size:18px}
+
+.info-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r-md); padding:14px 16px}
+.info-card + .info-card{margin-top:10px}
+.info-card .head{display:flex; align-items:center; gap:10px; margin-bottom:6px; font-weight:700; font-size:16px}
+.info-card .meta{display:flex; align-items:center; gap:10px; padding:4px 0; font-size:14px; color:var(--ink-mute)}
+.info-card .meta svg{color:var(--icon-mute); flex:none}
+
+.save-as{display:flex; gap:8px; flex-wrap:wrap}
+.save-as .chip{height:40px; padding:0 14px}
+
+/* ===== Section 4: M-tabs (Trips, Help, Profile) ===== */
+.user-card{display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-surface); border-radius:var(--r-md); margin:0 20px}
+.user-card .av{width:36px; height:36px; border-radius:50%; background:var(--bg-card); display:grid; place-items:center; flex:none; color:var(--ink-mute)}
+.user-card .texts{flex:1}
+.user-card .t1{font-weight:700; font-size:17px}
+.user-card .t2{font-size:13px; color:var(--ink-mute); margin-top:1px}
+
+.switch{width:50px; height:28px; background:var(--line-strong); border-radius:14px; position:relative; cursor:pointer; flex:none; border:0; padding:0; transition:background .18s}
+.switch::after{content:""; position:absolute; top:2px; left:2px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.2); transition:left .18s}
+.switch.on{background:var(--ink)}
+.switch.on::after{left:24px}
+
+.row.m-row{align-items:center}
+.row.m-row::after{content:""; width:18px; height:18px; margin-left:auto; background:var(--ink-mute);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+  flex:none}
+
+/* ===== Section 5: no-app lane (W1-W4) ===== */
+.screen.wa{background:var(--bg-surface)}
+
+.browser-bar{display:flex; align-items:center; justify-content:center; gap:8px; background:var(--bg-surface); border-radius:12px; margin:12px 20px 4px; padding:8px 12px; font-size:14px; color:var(--ink-mute)}
+.browser-bar svg{color:var(--ink-mute)}
+.screen.wa .browser-bar{background:var(--bg-card); border:1px solid var(--line)}
+
+.poster{background:var(--bg-card); border-radius:var(--r-md); padding:20px; text-align:center; margin:8px 20px 0}
+.poster h2{margin:0; font-size:22px; line-height:28px; font-weight:800; letter-spacing:-.015em}
+.poster .qr-box{width:200px; height:200px; margin:16px auto 10px; border:2px solid var(--ink); border-radius:16px; display:grid; place-items:center; padding:16px}
+.poster .qr-box svg{width:100%; height:100%; color:var(--ink)}
+.poster .caption{font-weight:700; font-size:15px; margin-top:6px}
+.poster .fare{font-size:14px; color:var(--ink-mute); margin-top:8px; line-height:19px}
+.poster .langs{font-weight:700; color:var(--ink); margin-top:14px; font-size:15px}
+
+.counter-row{display:flex; align-items:center; gap:12px; padding:14px 16px; margin:12px 20px 0; background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r-md)}
+.counter-row .ico{width:36px; height:36px; border-radius:var(--r-sm); background:var(--bg-surface); display:grid; place-items:center; flex:none}
+.counter-row .texts{flex:1}
+.counter-row .t1{font-weight:700; font-size:15px}
+.counter-row .t2{font-size:13px; color:var(--ink-mute); margin-top:1px}
+
+.wa-head{display:flex; align-items:center; gap:12px; padding:10px 16px; background:var(--bg-surface); border-bottom:1px solid var(--line)}
+.wa-head .back{width:36px; height:36px; display:grid; place-items:center; border:0; background:none}
+.wa-head .ava{width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; font-weight:800; font-size:14px}
+.wa-head .texts{flex:1; min-width:0}
+.wa-head .name{font-weight:700; font-size:17px; line-height:20px}
+.wa-head .sub{font-size:12px; color:var(--ink-mute); line-height:16px; margin-top:1px}
+
+.wa-msg{background:var(--bg-card); border-radius:14px; padding:14px; margin:12px 20px 0; box-shadow:0 1px 1px rgba(0,0,0,.05)}
+.wa-msg .t1{font-weight:700; font-size:17px; line-height:22px}
+.wa-msg .body{font-size:15px; line-height:22px; margin-top:4px; color:var(--ink)}
+.wa-msg .code-line{font-weight:800; font-size:17px; margin-top:8px}
+.wa-msg .ts{font-size:11px; color:var(--ink-mute); margin-top:6px}
+
+.wa-reply{display:block; width:calc(100% - 40px); margin:10px 20px 0; padding:14px; background:var(--bg-card); border-radius:14px; font-weight:700; font-size:15px; text-align:center; cursor:pointer; border:0; color:var(--ink); box-shadow:0 1px 1px rgba(0,0,0,.05)}
+.wa-reply:hover{background:var(--bg-pill)}
+
+.web-field{display:block; margin:6px 20px 0}
+.web-field .label{font-size:13px; color:var(--ink); font-weight:600; margin:12px 2px 6px}
+
+.pay-opt .mark{width:22px; height:22px; border-radius:50%; border:1.5px solid var(--line-strong); margin-left:auto; flex:none; display:grid; place-items:center}
+.pay-opt.sel .mark{background:var(--ink); border-color:var(--ink)}
+.pay-opt.sel .mark::before{content:""; width:10px; height:10px; border-radius:50%; background:#fff}
+
+/* X0 Edge-case index list */
+.x-index .row{min-height:52px; padding:14px 20px}
+.x-index .row .t1{font-weight:700}
+.x-index .row::after{content:""; width:18px; height:18px; margin-left:auto; background:var(--ink-mute);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;}
+
+/* ===== SP · Splash (Fixride) ===== */
+.screen.splash{background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; padding:0; overflow:hidden}
+.phone.splash .statusbar .time{color:#fff}
+.phone.splash .statusbar .cluster span{background:#fff}
+.phone.splash .homeind::after{background:#fff}
+.splash-content{display:flex; flex-direction:column; align-items:center; gap:18px; position:relative; z-index:2}
+.splash-mark{width:88px; height:106px; animation:splashMark 900ms cubic-bezier(.2,.9,.3,1.15) both}
+.splash-word{font-size:40px; font-weight:800; letter-spacing:-.03em; color:#fff; animation:splashWord 700ms var(--ease-out) 260ms both}
+.splash-rings{position:absolute; left:50%; top:50%; width:1px; height:1px; pointer-events:none; z-index:1}
+.splash-rings span{position:absolute; left:50%; top:50%; width:160px; height:160px; margin:-80px 0 0 -80px; border:1px solid rgba(255,255,255,.22); border-radius:50%; opacity:0; animation:splashRing 2.6s ease-out infinite}
+.splash-rings span:nth-child(2){animation-delay:.65s}
+.splash-rings span:nth-child(3){animation-delay:1.3s}
+
+/* Micro-interaction polish */
+.btn, .option, .tile-radio, .tile-check, .chip, .row, .card, .wa-reply, .seg-tab{transition:background var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out),color var(--dur-fast) var(--ease-out)}
+.option:active, .tile-radio:active, .tile-check:active, .row:active{transform:scale(.995)}
+.chip:active{transform:scale(.96)}
+.wa-reply:active{transform:scale(.98)}
+.seg-tab:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+.toast{transition:opacity var(--dur-fast), transform var(--dur-fast)}
+.sheet{animation:sheetSpring var(--dur-sheet) cubic-bezier(.2,.9,.25,1.08)}
+.dialog{animation:dialogPop var(--dur-dialog) cubic-bezier(.2,.9,.3,1.1)}
+.keypad .key{transition:background 90ms var(--ease-out), transform 90ms var(--ease-out)}
+.keypad .key:active{background:var(--bg-pill); transform:scale(.95)}
+.switch:active{transform:scale(.97)}
+.code .box.filled, .code-big .box{animation:codeIn 180ms var(--ease-out)}
+.bagcheck .mark svg, .tile-check.on .mark svg{animation:checkDraw 220ms var(--ease-out)}
+.row:active, .m-row:active{background:var(--bg-surface)}
+.stepper .val{transition:transform 140ms var(--ease-out)}

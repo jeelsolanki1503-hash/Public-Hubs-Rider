@@ -1,0 +1,379 @@
+/* Reusable UI pieces. One rule per component, every state covered. Screens
+   compose these; they never redefine their own buttons, inputs, chips, etc. */
+
+/* ---------- Top bar ---------- */
+.topbar{
+  min-height:var(--h-topbar); display:flex; align-items:center; gap:4px;
+  padding:4px 8px;
+}
+.topbar .back{width:44px; height:44px; display:grid; place-items:center; border-radius:var(--r-pill)}
+.topbar .back:hover{background:var(--bg-surface)}
+.topbar .title{font-weight:700; font-size:22px; line-height:28px; letter-spacing:-.01em; flex:1; padding:0 4px}
+.topbar .title.sm{font-size:17px; line-height:22px; font-weight:600}
+.topbar .trail{margin-left:auto; padding:0 12px; color:var(--ink-mute); font-size:17px; font-weight:600; min-height:44px; display:flex; align-items:center}
+.topbar .trail.link{color:var(--ink)}
+.topbar .chip-trail{margin-left:auto; margin-right:12px}
+.topbar .trail.cancel{color:var(--ink-mute); background:none; border:0; cursor:pointer; font-weight:600}
+
+/* ---------- Big titles ---------- */
+.pagehead{padding:12px 20px 4px}
+.pagehead h1{margin:0; font-size:28px; line-height:34px; font-weight:700; letter-spacing:-.02em}
+.pagehead p{margin:4px 0 0; color:var(--ink-mute); font-size:15px; line-height:20px}
+
+/* ---------- Typography helpers ---------- */
+.t-hero    {font-size:48px; line-height:56px; font-weight:800; letter-spacing:-.03em}
+.t-num     {font-size:40px; line-height:48px; font-weight:800; letter-spacing:-.02em}
+.t-large   {font-size:28px; line-height:34px; font-weight:700; letter-spacing:-.02em}
+.t-title1  {font-size:22px; line-height:28px; font-weight:700; letter-spacing:-.015em}
+.t-title2  {font-size:20px; line-height:26px; font-weight:600; letter-spacing:-.01em}
+.t-headline{font-size:17px; line-height:22px; font-weight:600}
+.t-body    {font-size:17px; line-height:24px}
+.t-callout {font-size:16px; line-height:22px}
+.t-sub     {font-size:15px; line-height:20px; color:var(--ink-mute)}
+.t-foot    {font-size:13px; line-height:18px; color:var(--ink-mute)}
+.t-label   {font-size:13px; line-height:18px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-mute)}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; height:var(--h-btn-l); padding:0 20px;
+  border-radius:var(--r-btn); font-weight:600; font-size:17px; line-height:1;
+  transition:transform var(--dur-fast) var(--ease-out), background var(--dur-fast);
+  user-select:none;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent); color:var(--accent-ink)}
+.btn-primary:hover{background:var(--accent-press)}
+.btn-primary:disabled{background:var(--bg-surface); color:var(--ink-faint); cursor:not-allowed}
+.btn-secondary{background:transparent; color:var(--ink); border:1.5px solid var(--line-strong)}
+.btn-secondary:hover{background:var(--bg-surface)}
+.btn-tonal{background:var(--bg-surface); color:var(--ink)}
+.btn-tonal:hover{background:color-mix(in srgb, var(--bg-surface) 70%, var(--ink) 6%)}
+.btn-danger{background:var(--error); color:#fff}
+.btn-m{height:var(--h-btn-m); font-size:16px}
+.btn-s{height:var(--h-btn-s); padding:0 16px; font-size:15px}
+.btn-link{height:44px; background:none; color:var(--ink); font-weight:600; font-size:17px; width:100%; display:inline-flex; align-items:center; justify-content:center}
+.btn-link.danger{color:var(--error)}
+.btn-link.quiet{color:var(--ink-mute); font-weight:600}
+.btn.btn-disabled{background:var(--bg-surface); color:var(--ink-faint); cursor:not-allowed}
+.btn.btn-disabled:active{transform:none}
+
+/* ---------- Icons ---------- */
+.i{width:24px; height:24px; display:inline-block; flex:none; color:var(--ink)}
+.i-20{width:20px; height:20px}
+.i-16{width:16px; height:16px}
+.i-28{width:28px; height:28px}
+.i-mute{color:var(--ink-mute)}
+.i-faint{color:var(--icon-mute)}
+.i-accent{color:var(--accent)}
+.i-success{color:var(--success)}
+.i-error{color:var(--error)}
+.i-warn{color:var(--warning)}
+
+/* Round icon chip (grey circle before a title) */
+.iconchip{
+  width:40px; height:40px; border-radius:var(--r-pill);
+  background:var(--bg-surface); display:grid; place-items:center; flex:none;
+}
+.iconchip.lg{width:56px; height:56px}
+.iconchip.ink{background:var(--ink); color:#fff}
+.iconchip.ink .i{color:#fff}
+.iconchip.accent{background:var(--accent-soft); color:var(--accent)}
+.iconchip.accent .i{color:var(--accent)}
+.iconchip.sq{border-radius:var(--r-sm)}
+
+/* ---------- List rows ---------- */
+.row{
+  display:flex; align-items:center; gap:12px; padding:12px 20px; min-height:var(--h-row-min);
+  width:100%; text-align:left;
+}
+.row + .row{border-top:1px solid var(--line)}
+.row .texts{flex:1; min-width:0}
+.row .texts .t1{font-weight:600; font-size:17px; line-height:22px; color:var(--ink)}
+.row .texts .t2{font-size:15px; line-height:20px; color:var(--ink-mute)}
+.row .right{color:var(--ink-mute); display:flex; align-items:center; gap:6px}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r-md);
+  padding:16px;
+}
+.card.dark{background:var(--ink); color:#fff; border-color:transparent}
+.card.dark .mute, .card.dark .t-sub{color:rgba(255,255,255,.72)}
+.card.dark .faint{color:rgba(255,255,255,.6)}
+.card.teal{background:var(--accent-soft); border-color:transparent; color:var(--ink)}
+.card.filled{background:var(--bg-surface); border-color:transparent}
+.card.dashed{background:transparent; border:1.5px dashed var(--line-strong)}
+.card-row{display:flex; align-items:center; gap:12px}
+.card-split > *{display:flex; align-items:center; gap:12px; padding:14px 0}
+.card-split > * + *{border-top:1px solid var(--line)}
+
+.sec-label{padding:16px 20px 6px}
+
+/* ---------- Form fields ---------- */
+.field{display:block}
+.field > .label{font-size:13px; font-weight:600; color:var(--ink); margin:0 4px 6px}
+.input{
+  display:flex; align-items:center; gap:0; width:100%;
+  height:var(--h-input); padding:0 16px; background:var(--bg-card);
+  border:1.5px solid var(--line-strong); border-radius:var(--r-sm);
+  font-size:17px; color:var(--ink);
+}
+.input:focus-within,
+.input.focused{border-color:var(--ink); border-width:2px; padding:0 15.5px}
+.input input, .input textarea{
+  flex:1; min-width:0; height:100%; border:0; outline:0; background:transparent;
+  font-size:17px; color:var(--ink);
+}
+.input .prefix{color:var(--ink); font-weight:400; padding-right:12px; margin-right:12px; border-right:1px solid var(--line); height:28px; display:flex; align-items:center}
+.input .clear, .input .adorn{color:var(--ink-mute); display:flex; align-items:center}
+.input.search .adorn{margin-right:10px}
+.help{font-size:13px; color:var(--ink-mute); margin:6px 4px 0; line-height:18px}
+.help.err{color:var(--error)}
+
+/* ---------- Code boxes (SMS/trip code) ---------- */
+.code{display:flex; gap:8px; justify-content:space-between}
+.code .box{
+  flex:1; aspect-ratio:1/1.1; max-width:48px; height:56px;
+  display:grid; place-items:center;
+  border:1.5px solid var(--line-strong); border-radius:var(--r-sm);
+  font-size:28px; font-weight:700; color:var(--ink); background:var(--bg-card);
+}
+.code .box.filled{border-color:var(--ink)}
+.code .box.caret{border-color:var(--ink); border-width:2px}
+
+/* ---------- Stepper (bags, people) ---------- */
+.stepper{display:flex; align-items:center; gap:10px}
+.stepper button{
+  width:36px; height:36px; border-radius:var(--r-pill);
+  border:1.5px solid var(--line-strong); display:grid; place-items:center;
+  background:var(--bg-card); color:var(--ink);
+}
+.stepper button:hover{background:var(--bg-surface)}
+.stepper button:disabled{color:var(--icon-mute); cursor:not-allowed}
+.stepper .val{min-width:22px; text-align:center; font-size:18px; font-weight:600}
+
+/* ---------- Form row (label on left, stepper right) ---------- */
+.form-row{display:flex; align-items:center; padding:14px 20px; min-height:60px; gap:12px}
+.form-row + .form-row{border-top:1px solid var(--line)}
+.form-row .texts{flex:1; min-width:0}
+.form-row .t1{font-weight:600; font-size:17px}
+.form-row .t2{font-size:14px; color:var(--ink-mute)}
+
+/* ---------- Option card (ride option) ---------- */
+.option{
+  display:flex; align-items:center; gap:12px; padding:14px 16px;
+  background:var(--bg-card); border:1.5px solid var(--line); border-radius:var(--r-md);
+  width:100%; text-align:left; cursor:pointer;
+}
+.option + .option{margin-top:10px}
+.option.selected{border-color:var(--ink); border-width:2px; padding:13px 15px}
+.option .iconchip{background:var(--bg-surface)}
+.option .texts{flex:1; min-width:0}
+.option .texts .t1{font-weight:600; font-size:17px}
+.option .texts .t2{font-size:14px; color:var(--ink-mute); margin-top:2px; line-height:18px}
+.option .price{font-weight:700; font-size:17px; margin-left:auto; white-space:nowrap}
+.option.disabled{color:var(--ink-faint); background:var(--bg-surface); border-color:var(--line)}
+.option.disabled .iconchip{background:transparent}
+.option.disabled .texts .t1{color:var(--ink-faint)}
+
+/* ---------- Language tile (big radio) ---------- */
+.tile-radio{display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-card);
+  border:1.5px solid var(--line); border-radius:var(--r-md); width:100%; text-align:left}
+.tile-radio + .tile-radio{margin-top:10px}
+.tile-radio.selected{border-color:var(--ink); border-width:2px; padding:13px 15px; background:var(--bg-surface)}
+.tile-radio .texts{flex:1; min-width:0}
+.tile-radio .lang-main{font-weight:700; font-size:20px; line-height:26px}
+.tile-radio .lang-sub{font-size:14px; color:var(--ink-mute); margin-top:1px}
+.tile-radio .mark{width:24px; height:24px; border-radius:var(--r-pill); border:1.5px solid var(--line-strong); display:grid; place-items:center}
+.tile-radio.selected .mark{background:var(--ink); border-color:var(--ink); color:#fff}
+
+/* ---------- Checkbox tile (share contacts) ---------- */
+.tile-check{display:flex; align-items:center; gap:12px; padding:14px 4px; width:100%; text-align:left}
+.tile-check + .tile-check{border-top:1px solid var(--line)}
+.tile-check .mark{width:22px; height:22px; border-radius:var(--r-xs); border:1.5px solid var(--line-strong); display:grid; place-items:center; margin-left:auto; flex:none; color:#fff}
+.tile-check.on .mark{background:var(--ink); border-color:var(--ink)}
+
+/* ---------- Chips & status ---------- */
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border-radius:var(--r-lg); background:var(--bg-card); border:1.5px solid var(--line); font-weight:600; font-size:15px}
+.chip.sel{background:var(--ink); color:#fff; border-color:var(--ink)}
+
+.status{display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-radius:var(--r-pill); background:var(--bg-surface); font-size:13px; font-weight:600; color:var(--ink-soft)}
+.status.success{background:var(--success-soft); color:var(--success)}
+.status.warn   {background:var(--warning-soft); color:var(--warning)}
+.status.err    {background:var(--error-soft);   color:var(--error)}
+.status.dark   {background:var(--ink); color:#fff}
+.status.accent {background:var(--accent-soft); color:var(--accent)}
+
+/* ---------- Step bar progress ---------- */
+.stepbar{display:flex; gap:6px; padding:0 20px}
+.stepbar span{flex:1; height:4px; background:var(--line); border-radius:4px}
+.stepbar span.on{background:var(--ink)}
+
+/* ---------- Numeric keypad (mock iOS) ---------- */
+.keypad{
+  background:var(--bg-surface); padding:8px 6px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px 6px;
+}
+.keypad .key{
+  height:46px; background:var(--bg-card); border-radius:6px;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  color:var(--ink);
+  box-shadow:0 1px 0 rgba(0,0,0,.1);
+}
+.keypad .key .n{font-size:26px; font-weight:400; line-height:1}
+.keypad .key .l{font-size:9px; letter-spacing:.14em; color:var(--ink-mute); margin-top:1px; font-weight:600}
+.keypad .key.empty{background:transparent; box-shadow:none}
+.keypad .key.back{background:transparent; box-shadow:none}
+
+/* ---------- Scrim + overlays ---------- */
+.scrim{
+  position:absolute; inset:0; background:var(--scrim); z-index:40;
+  opacity:0; animation:fadeIn var(--dur-dialog) var(--ease-out) forwards;
+}
+.scrim[hidden]{display:none !important}
+
+/* Bottom sheet */
+.sheet{
+  position:absolute; left:0; right:0; bottom:0; z-index:41;
+  background:var(--bg-card); color:var(--ink);
+  border-top-left-radius:var(--r-sheet); border-top-right-radius:var(--r-sheet);
+  padding:12px 20px calc(16px + var(--h-home));
+  max-height:90%; overflow:auto; transform:translateY(0);
+  animation:sheetIn var(--dur-sheet) var(--ease-out);
+}
+.sheet[hidden]{display:none !important}
+.sheet .grabber{width:36px; height:5px; background:var(--line-strong); border-radius:3px; margin:0 auto 14px}
+.sheet h2{margin:0 0 4px; font-size:22px; line-height:28px; font-weight:700; letter-spacing:-.015em}
+.sheet .sub{color:var(--ink-mute); font-size:15px; line-height:20px; margin-bottom:12px}
+.sheet .sheet-footer{margin-top:16px}
+.sheet-stack > * + *{margin-top:10px}
+
+/* Dialog */
+.dialog{
+  position:absolute; left:50%; top:50%; z-index:42;
+  width:300px; transform:translate(-50%,-50%);
+  background:var(--bg-card); border-radius:var(--r-dialog); padding:20px;
+  animation:dialogIn var(--dur-dialog) var(--ease-out);
+}
+.dialog[hidden]{display:none !important}
+.dialog h3{margin:4px 0 6px; font-size:17px; font-weight:700; text-align:center}
+.dialog p{margin:0 0 16px; text-align:center; color:var(--ink-mute); font-size:13px; line-height:18px}
+
+/* iOS-style permission pop-up */
+.ospop{
+  position:absolute; left:50%; top:50%; z-index:43; transform:translate(-50%,-50%);
+  width:270px; background:#F2F2F2; color:#000; border-radius:14px;
+  overflow:hidden; animation:dialogIn var(--dur-dialog) var(--ease-out);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.ospop .head{padding:16px 16px 12px; text-align:center}
+.ospop .head .t{font-size:17px; font-weight:700; line-height:22px}
+.ospop .head .d{font-size:13px; line-height:17px; margin-top:4px; color:#1c1c1c}
+.ospop .act{display:block; width:100%; padding:11px; text-align:center; font-size:17px; color:#0A84FF; background:transparent; border-top:.5px solid rgba(0,0,0,.3)}
+.ospop .act.strong{font-weight:600}
+
+/* Toast */
+.toast{
+  position:absolute; left:20px; right:20px; z-index:50;
+  background:var(--ink); color:#fff; padding:12px 16px; border-radius:12px;
+  display:flex; align-items:center; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,.3);
+  animation:toastIn 240ms var(--ease-out);
+}
+.toast .i{color:var(--accent-on-dark)}
+
+/* Spinner (20/40/96) */
+.spin{width:40px; height:40px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--ink); animation:spin 900ms linear infinite}
+.spin.lg{width:96px; height:96px; border-width:4px}
+.spin.sm{width:20px; height:20px; border-width:2px}
+
+/* Timeline */
+.timeline{display:flex; flex-direction:column; gap:0}
+.timeline .step{display:flex; gap:14px; align-items:flex-start; padding:12px 0}
+.timeline .n{
+  width:28px; height:28px; border-radius:var(--r-pill); border:1.5px solid var(--line-strong);
+  display:grid; place-items:center; font-size:14px; font-weight:600; color:var(--ink); flex:none;
+}
+.timeline .step.done .n{background:var(--ink); color:#fff; border-color:var(--ink)}
+.timeline .texts .t1{font-weight:700; font-size:17px}
+.timeline .texts .t2{color:var(--ink-mute); font-size:14px; margin-top:1px; line-height:18px}
+
+/* ---------- Tab bar ---------- */
+.tabbar{
+  position:absolute; left:0; right:0; bottom:0; height:var(--h-tabbar);
+  padding:8px 8px calc(var(--h-home) + 8px); background:var(--bg-app);
+  border-top:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(4,1fr); z-index:3;
+}
+.tabbar.d3{grid-template-columns:repeat(3,1fr)}
+.tabbar .tab{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--icon-mute); padding:4px}
+.tabbar .tab .lbl{font-size:11px; font-weight:600}
+.tabbar .tab.on{color:var(--ink)}
+.screen.has-tabs > .main{padding-bottom:var(--h-tabbar)}
+
+/* ---------- Sticky price bar ---------- */
+.price-bar{
+  display:flex; align-items:center; gap:12px; padding:10px 20px 16px;
+  border-top:1px solid var(--line); background:var(--bg-app);
+}
+.price-bar .left{flex:1; min-width:0}
+.price-bar .big{font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1}
+.price-bar .sub{font-size:13px; color:var(--ink-mute); margin-top:2px}
+.price-bar .btn{width:auto; min-width:150px; padding:0 24px}
+
+/* ---------- Banner ---------- */
+.banner{
+  display:flex; gap:10px; padding:12px 14px; border-radius:var(--r-md); align-items:flex-start;
+  font-size:14px; line-height:18px;
+}
+.banner.info{border:1.5px dashed var(--line-strong); color:var(--ink-mute)}
+.banner.accent{background:var(--accent-soft); color:var(--ink)}
+.banner.warn{background:var(--warning-soft); color:var(--warning)}
+.banner.err{background:var(--error-soft); color:var(--error)}
+.banner.dark{background:var(--ink); color:#fff}
+
+/* ---------- Image placeholder & map placeholder ---------- */
+.imgph{
+  background:var(--bg-surface); border-radius:var(--r-md);
+  display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center;
+  color:var(--ink-mute); font-size:14px; text-align:center; padding:28px 20px;
+}
+.imgph .i{color:var(--icon-mute)}
+.imgph.map{background:
+  repeating-linear-gradient(0deg,  var(--bg-surface) 0 46px, color-mix(in srgb, var(--bg-surface) 60%, var(--line)) 46px 47px),
+  repeating-linear-gradient(90deg, transparent      0 46px, color-mix(in srgb, var(--bg-surface) 60%, var(--line)) 46px 47px);}
+
+/* ---------- Dark flight hero (B1) ---------- */
+.flighthero{background:var(--ink); color:#fff; border-radius:var(--r-md); padding:18px}
+.flighthero .label{font-size:11px; letter-spacing:.14em; font-weight:600; color:rgba(255,255,255,.7); text-transform:uppercase}
+.flighthero .t{font-size:22px; font-weight:700; line-height:28px; margin-top:4px}
+.flighthero .sub{color:rgba(255,255,255,.7); font-size:14px; margin-top:4px}
+.flighthero .status{background:rgba(255,255,255,.14); color:#fff}
+
+/* ---------- Fare summary ---------- */
+.fsum{display:flex; flex-direction:column; gap:10px}
+.fsum .ln{display:flex; justify-content:space-between; align-items:center}
+.fsum .ln .k{color:var(--ink)}
+.fsum .ln .v{font-weight:600}
+.fsum .tot{border-top:1px solid var(--line); padding-top:10px; margin-top:4px}
+.fsum .tot .k{font-weight:700}
+.fsum .tot .v{font-weight:800; font-size:20px}
+
+/* ---------- "How it works" compact rows ---------- */
+.how .row{min-height:48px; padding:10px 20px}
+.how .n{font-size:17px; font-weight:600; width:30px}
+
+/* ---------- Ride-locked hero ---------- */
+.lockedhero{text-align:center; padding:24px 20px 10px}
+.lockedhero .circle{width:72px; height:72px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; margin:0 auto 14px}
+.lockedhero h1{margin:4px 0; font-size:26px; line-height:32px; font-weight:800; letter-spacing:-.02em}
+.lockedhero p{margin:4px 20px 0; color:var(--ink-mute); font-size:15px; line-height:20px}
+
+/* ---------- Flight card compact ---------- */
+.flight-card{display:flex; gap:12px; padding:14px; border:1px solid var(--line); border-radius:var(--r-md); align-items:center}
+.flight-card .plane{width:40px; height:40px; border-radius:var(--r-sm); background:var(--bg-surface); display:grid; place-items:center}
+
+/* ---------- Share tiles row ---------- */
+.share-tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:4px}
+.share-tiles .chip{justify-content:center}

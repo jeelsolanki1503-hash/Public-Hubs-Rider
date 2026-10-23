@@ -1,0 +1,20 @@
+/* All @keyframes used by the app. Nothing longer than 300ms except timers. */
+@keyframes slideInR { from{transform:translateX(14%);  opacity:.6} to{transform:none; opacity:1} }
+@keyframes slideInL { from{transform:translateX(-14%); opacity:.6} to{transform:none; opacity:1} }
+@keyframes fadeIn   { to{opacity:1} }
+@keyframes sheetIn  { from{transform:translateY(100%)} to{transform:none} }
+@keyframes dialogIn { from{opacity:0; transform:translate(-50%,-50%) scale(.96)} to{opacity:1; transform:translate(-50%,-50%) scale(1)} }
+@keyframes toastIn  { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+@keyframes spin     { to{transform:rotate(360deg)} }
+@keyframes notifIn  { from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
+
+@keyframes splashMark   { 0%{opacity:0; transform:scale(.55) translateY(6px)} 55%{opacity:1; transform:scale(1.06) translateY(0)} 100%{opacity:1; transform:scale(1)} }
+@keyframes splashWord   { from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
+@keyframes splashRing   { 0%{opacity:0; transform:scale(.45)} 35%{opacity:.9} 100%{opacity:0; transform:scale(1.9)} }
+@keyframes sheetSpring  { from{transform:translateY(100%)} 70%{transform:translateY(-6px)} 100%{transform:none} }
+@keyframes dialogPop    { 0%{opacity:0; transform:translate(-50%,-50%) scale(.9)} 60%{opacity:1; transform:translate(-50%,-50%) scale(1.02)} 100%{opacity:1; transform:translate(-50%,-50%) scale(1)} }
+@keyframes codeIn       { from{transform:scale(.85); opacity:.4} to{transform:none; opacity:1} }
+@keyframes checkDraw    { from{transform:scale(0); opacity:0} to{transform:none; opacity:1} }
+@media (prefers-reduced-motion: reduce){
+  .splash-mark, .splash-word, .splash-rings span{animation:none}
+}

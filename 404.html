@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D5C63">
+<title>Fixride</title>
+<meta name="description" content="Fixed-fare, no-haggle ride home from Mumbai T2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="./css/variables.css">
+<link rel="stylesheet" href="./css/animations.css">
+<link rel="stylesheet" href="./css/base.css">
+<link rel="stylesheet" href="./css/components.css">
+<link rel="stylesheet" href="./css/screens.css">
+</head>
+<body><!-- =============== APP =============== -->
+<div class="phone" id="phone" role="application" aria-label="Fixride prototype">
+
+  <div class="statusbar"><span class="time">9:41</span><div class="cluster"><span></span><span></span><span></span></div></div>
+  <div class="homeind" aria-hidden="true"></div>
+
+  <!-- Global bottom nav (always visible except on splash/lock/sign-up) -->
+  <nav class="tabbar tabbar-global" id="globalTabs" aria-label="Primary">
+    <button class="tab" data-tab="Home" data-go="B1">
+      <span class="ico-lined"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+      <span class="ico-filled"><svg class="i i-20" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v1h-2v9h-5v-6h-4v6H5v-9H3z" fill="currentColor"/></svg></span>
+      <span class="lbl">Home</span>
+    </button>
+    <button class="tab" data-tab="Trips" data-go="M1">
+      <span class="ico-lined"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></span>
+      <span class="ico-filled"><svg class="i i-20" viewBox="0 0 24 24"><path d="M6 2h12v20H6V2zm2.5 3h7v2h-7V5zm0 4h7v2h-7V9zm0 4h5v2h-5v-2z" fill="currentColor"/></svg></span>
+      <span class="lbl">Trips</span>
+    </button>
+    <button class="tab" data-tab="Help" data-go="M3">
+      <span class="ico-lined"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg></span>
+      <span class="ico-filled"><svg class="i i-20" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 15.5a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2zm1.6-5.4c-.5.4-.6.6-.6 1.2v.3a1 1 0 1 1-2 0v-.3c0-1.3.5-2 1.4-2.6.6-.5.8-.8.8-1.3a1.6 1.6 0 1 0-3.1 0 1 1 0 1 1-2 0 3.6 3.6 0 1 1 5.5 2.7z" fill="currentColor"/></svg></span>
+      <span class="lbl">Help</span>
+    </button>
+    <button class="tab" data-tab="Profile" data-go="M6">
+      <span class="ico-lined"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+      <span class="ico-filled"><svg class="i i-20" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7z" fill="currentColor"/></svg></span>
+      <span class="lbl">Profile</span>
+    </button>
+  </nav>
+
+  <!-- Toast layer -->
+  <div class="toast" id="toast" hidden><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span id="toastText">Done</span></div>
+
+  <!-- Scrim / overlays -->
+  <div class="scrim" id="scrim" hidden></div>
+
+  <!-- ============== SCREENS ============== -->
+
+  <!-- SP Splash · Fixride brand (2s auto-advance → A1) -->
+  <section class="screen splash" data-screen="SP">
+    <div class="splash-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="splash-content">
+      <svg class="splash-mark" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fixride">
+        <path d="M50 6 C27 6 10 23 10 46 C10 76 50 114 50 114 C50 114 90 76 90 46 C90 23 73 6 50 6 Z" fill="#fff"/>
+        <circle cx="50" cy="40" r="12" fill="#0D5C63"/>
+        <path d="M44 46 L44 62 Q44 66 50 66 Q56 66 56 62 L56 46 Z" fill="#0D5C63"/>
+      </svg>
+      <div class="splash-word">Fixride</div>
+    </div>
+  </section>
+
+  <!-- A1 Welcome -->
+  <section class="screen" data-screen="A1">
+    <div class="main">
+      <div class="pad" style="padding-top:12px">
+        <div class="a1-illus">
+          <svg viewBox="0 0 362 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+            <!-- soft background panels -->
+            <rect x="0" y="0" width="362" height="300" rx="20" fill="#E6F3F2"/>
+            <circle cx="300" cy="60" r="80" fill="#D7EAE8" opacity=".7"/>
+            <circle cx="40" cy="240" r="90" fill="#D7EAE8" opacity=".6"/>
+
+            <!-- plane with dashed trail -->
+            <path d="M30 70 Q130 40 220 60" stroke="#0D5C63" stroke-width="2" stroke-dasharray="4 6" fill="none" stroke-linecap="round"/>
+            <g transform="translate(220 50) rotate(18)">
+              <path d="M0 0 L28 -4 L34 0 L28 4 Z" fill="#0D5C63"/>
+              <path d="M18 -2 L24 -10 L30 -10 L24 -2 Z" fill="#0D5C63"/>
+              <path d="M18 2 L24 10 L30 10 L24 2 Z" fill="#0D5C63"/>
+            </g>
+
+            <!-- T2 marker bubble -->
+            <g transform="translate(160 110)">
+              <rect x="-24" y="-18" width="48" height="28" rx="6" fill="#fff" stroke="#0D5C63" stroke-width="2"/>
+              <path d="M-6 10 L0 18 L6 10 Z" fill="#fff" stroke="#0D5C63" stroke-width="2"/>
+              <path d="M-5 10 L5 10" stroke="#fff" stroke-width="3"/>
+              <text x="0" y="2" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="800" fill="#0D5C63">T2</text>
+            </g>
+
+            <!-- road -->
+            <rect x="0" y="235" width="362" height="40" fill="#111"/>
+            <path d="M0 255 L362 255" stroke="#FFC21A" stroke-width="3" stroke-dasharray="18 14"/>
+
+            <!-- auto rickshaw silhouette (original line-illustration) -->
+            <g transform="translate(96 170)">
+              <!-- canopy -->
+              <path d="M20 60 L20 30 Q20 10 50 10 L110 10 Q140 10 140 30 L140 60 Z" fill="#0D5C63"/>
+              <!-- side window band -->
+              <rect x="34" y="22" width="92" height="22" rx="4" fill="#5ED6CF" opacity=".85"/>
+              <!-- cab vertical post -->
+              <rect x="76" y="22" width="4" height="22" fill="#0D5C63"/>
+              <!-- front cowl -->
+              <path d="M140 60 L160 60 L160 48 Q160 40 150 40 L140 40 Z" fill="#0D5C63"/>
+              <!-- yellow number plate -->
+              <rect x="52" y="48" width="56" height="12" rx="2" fill="#FFC21A" stroke="#111" stroke-width="1"/>
+              <text x="80" y="57" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="800" fill="#111">MH 02 AB 1234</text>
+              <!-- wheels -->
+              <circle cx="48" cy="65" r="10" fill="#111"/>
+              <circle cx="48" cy="65" r="4" fill="#5ED6CF"/>
+              <circle cx="128" cy="65" r="10" fill="#111"/>
+              <circle cx="128" cy="65" r="4" fill="#5ED6CF"/>
+              <!-- headlight -->
+              <circle cx="156" cy="54" r="2.5" fill="#FFC21A"/>
+            </g>
+
+            <!-- luggage trolley (next to auto, left side) -->
+            <g transform="translate(42 192)">
+              <rect x="0" y="22" width="34" height="30" rx="4" fill="#111"/>
+              <rect x="4" y="26" width="26" height="4" fill="#5ED6CF"/>
+              <path d="M4 52 L4 60" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+              <path d="M30 52 L30 60" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="4" cy="62" r="2.5" fill="#111"/>
+              <circle cx="30" cy="62" r="2.5" fill="#111"/>
+              <!-- small cabin bag on top -->
+              <rect x="8" y="12" width="18" height="12" rx="2" fill="#0D5C63"/>
+              <rect x="14" y="8" width="6" height="4" rx="1" fill="#0D5C63"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="pad vgap-16" style="margin-top:28px">
+        <h1 class="t-large">Get home from Mumbai T2</h1>
+        <p class="t-body mute" style="margin:0">Lock your ride before you land. One fixed fare, one numbered pickup bay, no cash on top.</p>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="A2">Get started</button>
+      <button class="btn-link" data-go="A3" style="margin-top:4px">I already have an account</button>
+    </div>
+  </section>
+
+  <!-- A2 Choose language -->
+  <section class="screen" data-screen="A2" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Choose language</div></div>
+      <div class="pad"><p class="t-callout mute" style="margin:0 0 20px">You can change this any time in Profile.</p></div>
+      <div class="pad" id="langGroup" role="radiogroup" aria-label="Language">
+        <div class="lang-grid">
+          <button class="lang-card" role="radio" aria-checked="false" data-lang="hi">
+            <div class="lang-main" lang="hi" style="font-family:'Noto Sans Devanagari',serif">हिंदी</div>
+            <div class="lang-sub">Hindi</div>
+            <div class="mark"></div>
+          </button>
+          <button class="lang-card" role="radio" aria-checked="false" data-lang="mr">
+            <div class="lang-main" lang="mr" style="font-family:'Noto Sans Devanagari',serif">मराठी</div>
+            <div class="lang-sub">Marathi</div>
+            <div class="mark"></div>
+          </button>
+          <button class="lang-card selected" role="radio" aria-checked="true" data-lang="en">
+            <div class="lang-main">English</div>
+            <div class="lang-sub">English</div>
+            <div class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="A3">Next</button></div>
+  </section>
+
+  <!-- A3 Mobile number -->
+  <section class="screen" data-screen="A3" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <div class="pagehead"><h1>Your mobile number</h1><p>We will send a 6-digit code by SMS.</p></div>
+      <div class="pad" style="margin-top:16px">
+        <div class="field" id="phoneField">
+          <div class="label">Mobile number</div>
+          <div class="input focused">
+            <span class="prefix">+91</span>
+            <input id="phoneInput" type="tel" value="98765 43210" inputmode="numeric" autocomplete="tel-national" aria-label="Mobile number" maxlength="11">
+          </div>
+          <div class="help" id="phoneHelp">Your number stays hidden from drivers. Calls go through the app.</div>
+          <div class="help" style="margin-top:14px">By continuing you agree to the Terms and Privacy Policy.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" id="phoneSubmit">Send code</button></div>
+    <div class="keypad" aria-hidden="true">
+      <div class="key"><span class="n">1</span></div>
+      <div class="key"><span class="n">2</span><span class="l">ABC</span></div>
+      <div class="key"><span class="n">3</span><span class="l">DEF</span></div>
+      <div class="key"><span class="n">4</span><span class="l">GHI</span></div>
+      <div class="key"><span class="n">5</span><span class="l">JKL</span></div>
+      <div class="key"><span class="n">6</span><span class="l">MNO</span></div>
+      <div class="key"><span class="n">7</span><span class="l">PQRS</span></div>
+      <div class="key"><span class="n">8</span><span class="l">TUV</span></div>
+      <div class="key"><span class="n">9</span><span class="l">WXYZ</span></div>
+      <div class="key empty"></div>
+      <div class="key"><span class="n">0</span></div>
+      <div class="key back"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 5H9L2 12l7 7h13a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M18 9l-6 6M12 9l6 6"/></svg></div>
+    </div>
+  </section>
+
+  <!-- A4 Enter code -->
+  <section class="screen" data-screen="A4" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <div class="pagehead"><h1>Enter the code</h1><p>Sent to +91 98765 43210</p></div>
+      <div class="pad" style="margin-top:16px">
+        <div class="code" id="codeBoxes" role="group" aria-label="6-digit code">
+          <input type="text" inputmode="numeric" class="box" value="3" maxlength="1" data-code-box aria-label="Digit 1">
+          <input type="text" inputmode="numeric" class="box" value="8" maxlength="1" data-code-box aria-label="Digit 2">
+          <input type="text" inputmode="numeric" class="box" value="1" maxlength="1" data-code-box aria-label="Digit 3">
+          <input type="text" inputmode="numeric" class="box" value="4" maxlength="1" data-code-box aria-label="Digit 4">
+          <input type="text" inputmode="numeric" class="box" value="0" maxlength="1" data-code-box aria-label="Digit 5">
+          <input type="text" inputmode="numeric" class="box" value="2" maxlength="1" data-code-box aria-label="Digit 6">
+        </div>
+        <div class="help" id="codeHelp" style="margin-top:14px">Resend code in <span id="resend">0:24</span></div>
+        <button class="btn-link quiet" style="justify-content:flex-start; padding:12px 0; width:auto" data-go="X14">Code not working?</button>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" id="codeSubmit">Verify</button></div>
+    <div class="keypad" aria-hidden="true">
+      <div class="key"><span class="n">1</span></div>
+      <div class="key"><span class="n">2</span><span class="l">ABC</span></div>
+      <div class="key"><span class="n">3</span><span class="l">DEF</span></div>
+      <div class="key"><span class="n">4</span><span class="l">GHI</span></div>
+      <div class="key"><span class="n">5</span><span class="l">JKL</span></div>
+      <div class="key"><span class="n">6</span><span class="l">MNO</span></div>
+      <div class="key"><span class="n">7</span><span class="l">PQRS</span></div>
+      <div class="key"><span class="n">8</span><span class="l">TUV</span></div>
+      <div class="key"><span class="n">9</span><span class="l">WXYZ</span></div>
+      <div class="key empty"></div>
+      <div class="key"><span class="n">0</span></div>
+      <div class="key back"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 5H9L2 12l7 7h13a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M18 9l-6 6M12 9l6 6"/></svg></div>
+    </div>
+  </section>
+
+  <!-- A5 Name -->
+  <section class="screen" data-screen="A5" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <div class="pagehead"><h1>What should we call you?</h1><p>Your driver sees only your first name.</p></div>
+      <div class="pad vgap-16" style="margin-top:16px">
+        <div class="field"><div class="label">First name</div><div class="input focused"><input value="Ananya" autocomplete="given-name"></div></div>
+        <div class="field"><div class="label">Last name (optional)</div><div class="input"><input value="Desai" autocomplete="family-name"></div></div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-perm>Continue</button></div>
+  </section>
+
+  <!-- A6 Location permission (shown as OS pop-up over A5 backdrop) -->
+  <section class="screen" data-screen="A6" hidden>
+    <div class="main" style="background:rgba(0,0,0,.35)"></div>
+    <div class="ospop" role="alertdialog" aria-labelledby="osT">
+      <div class="head"><div class="t" id="osT">Allow &ldquo;Fixride&rdquo; to use your location?</div><div class="d">Used to show your pickup bay and walking directions inside the airport.</div></div>
+      <button class="act strong" data-go="A7">Allow While Using App</button>
+      <button class="act" data-go="A7">Allow Once</button>
+      <button class="act" data-go="X15">Don't Allow</button>
+    </div>
+  </section>
+
+  <!-- A7 Save your Home -->
+  <section class="screen" data-screen="A7" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Save your Home</div><button class="trail" style="color:var(--ink-mute); text-decoration:underline; text-underline-offset:3px; font-weight:600; background:none; border:0; cursor:pointer" data-go="B1">Skip</button></div>
+      <div class="pad"><p class="t-callout mute" style="margin:0 0 14px">Next time your ride home is ready in one tap.</p></div>
+      <div class="pad">
+        <div class="input focused search">
+          <span class="adorn"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+          <input value="Chakala, And" aria-label="Search a place">
+          <span class="clear"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="row" data-go="A7b" style="color:var(--accent)">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L19 20L12 16L5 20z"/></svg>
+          <div class="texts"><div class="t1" style="color:var(--accent)">Use my current location</div></div>
+        </button>
+        <button class="row" data-go="A7b">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <div class="texts"><div class="t1">Chakala, Andheri East</div><div class="t2">Mumbai 400099</div></div>
+        </button>
+        <button class="row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <div class="texts"><div class="t1">Chakala Metro Station</div><div class="t2">Andheri East, Mumbai</div></div>
+        </button>
+        <button class="row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <div class="texts"><div class="t1">Chakala Industrial Area</div><div class="t2">MIDC, Andheri East</div></div>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:16px"><div class="mini-map">
+        <svg viewBox="0 0 362 170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" width="100%" height="170">
+          <rect width="362" height="170" fill="#EAF2F0"/>
+          <g stroke="#C4D4D1" stroke-width="1" fill="none">
+            <path d="M-20 40 L380 40"/><path d="M-20 90 L380 90"/><path d="M-20 140 L380 140"/>
+            <path d="M60 -10 L60 180"/><path d="M160 -10 L160 180"/><path d="M260 -10 L260 180"/>
+          </g>
+          <path d="M-10 90 L160 90 L160 140 L380 140" stroke="#9BB7B2" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M-10 90 L160 90 L160 140 L380 140" stroke="#D7E3E1" stroke-width="2" stroke-dasharray="6 8" fill="none" stroke-linecap="round"/>
+          <circle cx="180" cy="60" r="24" fill="rgba(13,92,99,.1)"/>
+          <circle cx="180" cy="60" r="12" fill="var(--accent)"/>
+          <path d="M180 50 L180 70 M170 60 L190 60" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div></div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="A7b"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Save as Home</button></div>
+  </section>
+
+  <!-- B1 Home (first time) -->
+  <section class="screen has-tabs" data-screen="B1" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:26px">Hi Ananya</h1></div>
+      <div class="pad" style="margin-top:14px">
+        <div class="flighthero">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
+          <div style="margin-top:10px" class="t"><strong>Landing at T2 soon?</strong></div>
+          <div class="sub">Lock your ride home now. Fixed fare, set pickup bay.</div>
+          <div class="fh-input">
+            <input id="b1Flight" value="AI 864" aria-label="Flight number" autocapitalize="characters">
+            <button data-go="B2" aria-label="Confirm flight">
+              Confirm
+              <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <button class="card" style="display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer; padding:14px 16px" data-go="X17">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="12" height="16" rx="1"/><path d="M12 12h.01"/></svg></span>
+          <div class="texts" style="flex:1"><div class="t-headline">At the exit now?</div><div class="t-sub" style="margin-top:2px">Get the next car from the T2 queue</div></div>
+          <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="sec-label t-label">How it works</div>
+      <div class="how">
+        <div class="row"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <div class="texts"><div class="t1">1 · Lock before you land</div><div class="t2">Fare and pickup bay are fixed</div></div>
+        </div>
+        <div class="row"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span>
+          <div class="texts"><div class="t1">2 · Collect your bags</div><div class="t2">Tap "I have my bags" to call your auto</div></div>
+        </div>
+        <div class="row"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <div class="texts"><div class="t1">3 · Walk to your bay</div><div class="t2">Step-by-step, your auto is already there</div></div>
+        </div>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab" data-go="M1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab" data-go="M3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab" data-go="M6"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- B2 Your flight -->
+  <section class="screen" data-screen="B2" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Your flight</div></div>
+      <div class="pad" style="margin-top:4px">
+        <div class="field">
+          <div class="label">Flight number</div>
+          <div class="input focused"><input value="AI 864" autocapitalize="characters" aria-label="Flight number"><span class="clear"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <button class="flight-dropdown" data-go="B3" aria-expanded="false" aria-label="Found 1 flight today">
+          <div class="fd-head">
+            <span class="t-label" style="color:var(--ink-mute); padding:0">Found 1 flight today</span>
+            <svg class="i i-20 i-mute fd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fd-body">
+            <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+            <div class="texts" style="flex:1">
+              <div class="t1" style="font-weight:700">AI 864 · Delhi to Mumbai</div>
+              <div class="t2">Lands T2 · 22:40 today</div>
+            </div>
+            <span class="status success">On time</span>
+          </div>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:16px"><button class="btn-link quiet" style="justify-content:flex-start; padding-left:0; width:auto">Different date?</button></div>
+      <div class="pad" style="margin-top:20px">
+        <div class="banner info"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg><span>Landing times come from the airline schedule. If your flight is late, your ride moves with it.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B3 Ride home (book) -->
+  <section class="screen" data-screen="B3" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Ride home</div></div>
+      <div class="pad">
+        <div class="card" style="padding:4px 16px">
+          <button class="row" style="padding:14px 0; width:100%" data-go="B2">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+            <div class="texts"><div class="t1">AI 864 · lands T2 22:40</div><div class="t2">Today · tap to change</div></div>
+            <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <button class="row" style="padding:14px 0; width:100%; border-top:1px solid var(--line)" data-go="B3a">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+            <div class="texts"><div class="t1">Home · Chakala, Andheri East</div><div class="t2">9 km · tap to change</div></div>
+            <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sec-label t-label">What are you carrying?</div>
+      <div>
+        <div class="form-row"><div class="texts"><div class="t1">Big bags</div><div class="t2">Check-in</div></div><div class="stepper" data-step="big"><button aria-label="Minus">−</button><div class="val">2</div><button aria-label="Plus">+</button></div></div>
+        <div class="form-row"><div class="texts"><div class="t1">Small bags</div><div class="t2">Cabin</div></div><div class="stepper" data-step="small"><button aria-label="Minus">−</button><div class="val">1</div><button aria-label="Plus">+</button></div></div>
+        <div class="form-row"><div class="texts"><div class="t1">People</div><div class="t2">Including you</div></div><div class="stepper" data-step="people"><button aria-label="Minus">−</button><div class="val">1</div><button aria-label="Plus">+</button></div></div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="option selected" aria-pressed="true">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div class="texts" style="flex:1">
+            <div class="row-split"><div class="t1">Auto</div><div class="price">₹420</div></div>
+            <div class="t2">Fits 2 big + 1 small · tolls and bags included</div>
+            <div class="t2">Pickup: Bay 12, P6 East · about 4 min walk from the belt</div>
+          </div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:16px"><button class="btn-link quiet" style="justify-content:flex-start; padding-left:0; width:auto; font-weight:700; color:var(--ink); text-decoration:underline; text-underline-offset:3px" data-sheet="B3b">Other ways home</button></div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="price-bar">
+      <div class="left"><div class="big">₹420</div><div class="sub">All-in · nothing more to pay</div></div>
+      <button class="btn btn-primary" data-sheet="B4">Continue</button>
+    </div>
+  </section>
+
+  <!-- B3a Where to? -->
+  <section class="screen" data-screen="B3a" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Where to?</div></div>
+      <div class="pad">
+        <div class="input search">
+          <span class="adorn"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+          <input placeholder="Search a place" aria-label="Search a place">
+        </div>
+      </div>
+      <div class="sec-label t-label">Saved</div>
+      <button class="row" data-back>
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+        <div class="texts"><div class="t1">Home</div><div class="t2">Chakala, Andheri East</div></div>
+      </button>
+      <button class="row">
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16v10H4z"/><path d="M9 9V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span>
+        <div class="texts"><div class="t1">Add Work</div><div class="t2">Save once, pick in one tap</div></div>
+        <span class="right" aria-hidden="true"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+      </button>
+      <div class="sec-label t-label">Recent</div>
+      <button class="row" data-go="X16">
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span>
+        <div class="texts"><div class="t1">Sahar Village</div><div class="t2">Andheri East · 2 km</div></div>
+      </button>
+      <button class="row">
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span>
+        <div class="texts"><div class="t1">Bandra West</div><div class="t2">Mumbai · 11 km</div></div>
+      </button>
+    </div>
+    <div class="keypad" aria-hidden="true">
+      <div class="key"><span class="n">1</span></div><div class="key"><span class="n">2</span><span class="l">ABC</span></div><div class="key"><span class="n">3</span><span class="l">DEF</span></div>
+      <div class="key"><span class="n">4</span><span class="l">GHI</span></div><div class="key"><span class="n">5</span><span class="l">JKL</span></div><div class="key"><span class="n">6</span><span class="l">MNO</span></div>
+      <div class="key"><span class="n">7</span><span class="l">PQRS</span></div><div class="key"><span class="n">8</span><span class="l">TUV</span></div><div class="key"><span class="n">9</span><span class="l">WXYZ</span></div>
+      <div class="key empty"></div><div class="key"><span class="n">0</span></div>
+      <div class="key back"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 5H9L2 12l7 7h13a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M18 9l-6 6M12 9l6 6"/></svg></div>
+    </div>
+  </section>
+
+  <!-- B6 Ride locked -->
+  <section class="screen" data-screen="B6" hidden>
+    <div class="main">
+      <div class="lockedhero">
+        <div class="circle"><svg class="i i-28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h1>Your ride is locked</h1>
+        <p>We find your driver when you land and tap "I have my bags".</p>
+      </div>
+      <div class="pad" style="margin-top:16px">
+        <div class="card" style="padding:0">
+          <div class="card-split" style="padding:0 16px">
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span><div class="texts" style="flex:1"><div class="t1 t-headline">AI 864 lands 22:40</div><div class="t2 t-sub">Today · Terminal 2</div></div></div>
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div class="texts" style="flex:1"><div class="t1 t-headline">Bay 12, P6 East</div><div class="t2 t-sub">About 4 min walk from the belt</div></div></div>
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div class="texts" style="flex:1"><div class="t1 t-headline">₹420 paid</div><div class="t2 t-sub">All-in · nothing more to pay</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="B7">View my ride</button>
+      <button class="btn-link" data-sheet="B7a" style="margin-top:4px; text-decoration:underline; text-underline-offset:3px; color:var(--ink-mute); font-weight:600">Share with family</button>
+    </div>
+  </section>
+
+  <!-- B7 Your ride (scheduled) -->
+  <section class="screen" data-screen="B7" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-go="B8"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Your ride</div><span class="status chip-trail">Scheduled</span></div>
+      <div class="pad">
+        <div class="card" style="display:flex; gap:12px; align-items:center; background:var(--accent-soft); border-color:transparent">
+          <span class="iconchip" style="background:#fff"><svg class="i i-20 i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+          <div style="flex:1"><div class="t-headline" style="color:var(--ink)"><strong>AI 864 · On time</strong></div><div class="t-sub" style="color:var(--ink-mute)">Lands T2 at 22:40</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:18px">
+        <div class="timeline">
+          <div class="step done"><div class="n" style="background:var(--accent-soft); border-color:var(--accent); color:var(--accent)"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="texts"><div class="t1">Ride locked</div><div class="t2">₹420 paid</div></div></div>
+          <div class="step"><div class="n">2</div><div class="texts"><div class="t1">Your flight lands</div><div class="t2">We send you a message</div></div></div>
+          <div class="step"><div class="n">3</div><div class="texts"><div class="t1">Tap "I have my bags"</div><div class="t2">We call the next auto from the queue</div></div></div>
+          <div class="step"><div class="n">4</div><div class="texts"><div class="t1">Meet at Bay 12</div><div class="t2">Your auto is already there</div></div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:8px">
+        <div class="card" style="padding:0">
+          <div class="card-split" style="padding:0 16px">
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div style="flex:1"><div class="t-headline">Bay 12, P6 East</div><div class="t-sub">About 4 min walk from the belt</div></div></div>
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span><div style="flex:1"><div class="t-headline">2 big + 1 small · 1 person</div><div class="t-sub">Your auto fits these bags</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-secondary" data-sheet="B7a"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>Share with family</button>
+      <button class="btn-link quiet" style="margin-top:4px; text-decoration:underline; text-underline-offset:3px; font-weight:600" data-sheet="X8">Cancel ride</button>
+      <button class="btn-link" style="color:var(--ink-mute); font-weight:500; font-size:14px; height:36px" data-go="C1">Prototype: skip to landing &rarr;</button>
+      <button class="btn-link" style="color:var(--ink-mute); font-weight:500; font-size:14px; height:36px" data-go="X0">Prototype: see edge cases &rarr;</button>
+      <button class="btn-link" style="color:var(--ink-mute); font-weight:500; font-size:14px; height:36px" data-go="W1">Prototype: see no-app lane &rarr;</button>
+    </div>
+  </section>
+
+  <!-- B8 Home (ride booked) -->
+  <section class="screen has-tabs" data-screen="B8" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:26px">Hi Ananya</h1></div>
+      <div class="pad" style="margin-top:14px">
+        <button class="card dark" style="width:100%; text-align:left; padding:18px" data-go="B7">
+          <div class="row-split" style="margin-bottom:10px">
+            <span class="label" style="font-size:11px; letter-spacing:.14em; font-weight:700; color:rgba(255,255,255,.65); text-transform:uppercase">Your ride home</span>
+            <span class="status" style="background:rgba(255,255,255,.14); color:#fff">On time</span>
+          </div>
+          <div style="font-size:24px; font-weight:800; letter-spacing:-.02em; line-height:30px">AI 864 lands 22:40</div>
+          <div style="color:rgba(255,255,255,.78); margin-top:6px; font-size:15px">Bay 12, P6 East · ₹420 paid</div>
+          <div style="margin-top:12px; display:inline-flex; gap:6px; align-items:center; color:var(--accent-on-dark); font-weight:600">View ride <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <button class="card" style="display:flex; align-items:center; gap:14px; width:100%; text-align:left; padding:14px 16px" data-go="X17">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="12" height="16" rx="1"/><path d="M12 12h.01"/></svg></span>
+          <div style="flex:1"><div class="t-headline">At the exit now?</div><div class="t-sub">Get the next car from the T2 queue</div></div>
+          <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner accent" style="align-items:center">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>
+          <div><div class="t-headline" style="color:var(--ink)">Mom can follow this ride</div><div class="t-sub" style="color:var(--ink-mute); margin-top:2px">Shared from booking to your door</div></div>
+        </div>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab" data-go="M1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab" data-go="M3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab" data-go="M6"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- B5 Paying (full-screen state) -->
+  <section class="screen" data-screen="B5" hidden>
+    <div class="main" style="display:flex; align-items:center; justify-content:center; flex-direction:column; padding:0 40px">
+      <div class="spin lg"></div>
+      <h1 style="margin-top:28px; font-size:22px; font-weight:700; text-align:center">Approve ₹420 in your UPI app</h1>
+      <p class="t-callout mute" style="text-align:center; margin-top:6px">Don't close this screen. We'll bring you back.</p>
+    </div>
+    <div class="footer center"><button class="btn-link quiet" data-sheet="X13">Payment didn't go through?</button></div>
+  </section>
+
+  <!-- C1 Landed: notification (dark lock screen) -->
+  <section class="screen lock" data-screen="C1" hidden>
+    <div class="main">
+      <div class="lock-date">Sunday 18 October</div>
+      <div class="lock-time">22:42</div>
+      <button class="lock-notif" data-go="C2" aria-label="Open notification">
+        <div class="top"><span class="app">F</span><span class="app-name">Fixride</span><span class="ts">now</span></div>
+        <div class="title">Welcome to Mumbai, Ananya</div>
+        <div class="body">Collect your bags, then tap "I have my bags". We match you with the auto waiting at Bay 12.</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- C2 Welcome to Mumbai -->
+  <section class="screen" data-screen="C2" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:26px">Welcome to Mumbai</h1></div>
+      <div class="pad" style="margin-top:12px">
+        <div class="imgph" style="aspect-ratio:362/150">
+          <svg class="i i-28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+          Illustration: baggage belt
+        </div>
+      </div>
+      <div class="pad vgap-16" style="margin-top:20px">
+        <div><h2 class="t-large" style="margin:0">Collect your bags</h2><p class="t-callout mute" style="margin:4px 0 0">When you have them, tap the button. We call your auto only then, so nobody waits.</p></div>
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <div style="flex:1"><div class="t-headline">Pickup: Bay 12, P6 East</div><div class="t-sub">About 4 min walk from the belt</div></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">On the way · from the airport map</div>
+      <div class="pad">
+        <div class="amen-row">
+          <div class="amen">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><text x="12" y="15" text-anchor="middle" font-size="7" fill="currentColor" stroke="none" font-weight="800" font-family="Inter, sans-serif">WC</text></svg>
+            <div class="lbl">Washroom</div><div class="sub">By Gate 3</div>
+          </div>
+          <div class="amen">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3.5 4.5 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 2.5-6.5 6-11z"/></svg>
+            <div class="lbl">Water</div><div class="sub">By Gate 3</div>
+          </div>
+          <div class="amen">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h12v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2z"/><path d="M18 12h2a2 2 0 0 1 0 4h-2"/><path d="M8 8c0-1 .5-1.5.5-2.5M11 8c0-1 .5-1.5.5-2.5M14 8c0-1 .5-1.5.5-2.5"/></svg>
+            <div class="lbl">Food</div><div class="sub">Arrivals hall</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>I have my bags</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-sheet="X2">Bags delayed?</button>
+    </div>
+  </section>
+
+  <!-- C3 Finding your auto (auto → C4) -->
+  <section class="screen" data-screen="C3" hidden>
+    <div class="main" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 40px">
+      <div class="spin lg"></div>
+      <h1 style="margin:28px 0 6px; font-size:24px; font-weight:800; text-align:center; letter-spacing:-.02em">Finding your auto</h1>
+      <p class="t-callout mute" style="margin:0; text-align:center">Taking the next auto in the T2 queue. Every auto here is logged in the T2 register.</p>
+    </div>
+    <div class="footer center"><button class="btn-link quiet" data-go="X5">Prototype: no auto free →</button></div>
+  </section>
+
+  <!-- C4 Your driver -->
+  <section class="screen" data-screen="C4" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Your driver</div></div>
+      <div class="pad">
+        <div class="card drivercard">
+          <div style="display:flex; gap:14px; align-items:center">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--bg-surface); display:grid; place-items:center">
+              <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-mute)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+            <div>
+              <div class="t-title2" style="font-weight:700">Santosh</div>
+              <div class="t-sub" style="margin-top:2px; display:flex; gap:4px; align-items:center">
+                <svg class="i i-16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" style="color:var(--ink)"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg>
+                <span style="color:var(--ink-soft)">4.8 · 1,240 trips</span>
+              </div>
+            </div>
+          </div>
+          <div class="plate-dk">
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+            <div><div class="n">MH 02 AB 1234</div><div class="sub">Black and yellow auto</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+          <div style="flex:1"><div class="t-headline">On the T2 register since 21:52</div><div class="t-sub">0 cancels · 0 refusals in the last 30 days</div></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">Riders say</div>
+      <div class="pad">
+        <div class="chips">
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">Helps with bags</span>
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">On time</span>
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">Polite</span>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="banner accent" style="padding:14px 16px; align-items:center">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>
+          <div style="flex:1"><div class="t-headline" style="color:var(--ink)">Mom is following this ride</div><div class="t-sub" style="color:var(--ink-mute); margin-top:2px">She sees Santosh, his number plate and your trip</div></div>
+          <span style="width:28px; height:28px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; flex:none"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C5">Ride with Santosh</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-sheet="X3">Skip this auto · 1 skip left</button>
+    </div>
+  </section>
+
+  <!-- C5 Walk to Bay 12 -->
+  <section class="screen" data-screen="C5" hidden>
+    <div class="main">
+      <div class="topbar">
+        <div style="width:44px"></div>
+        <div class="title">Walk to Bay 12</div>
+        <button class="trail cancel" data-sheet="X9">Cancel</button>
+      </div>
+      <div class="pad">
+        <div class="bay-bar">
+          <div class="texts"><div class="t1">Santosh is at Bay 12</div><div class="t2">Free waiting left · then ₹1 a minute</div></div>
+          <div class="time" data-timer="c5">4:12</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><circle cx="15" cy="12" r="1" fill="currentColor"/></svg></div>
+          <div class="texts"><div class="t1">1 · Exit at Gate 3</div><div class="t2">Arrivals, ground floor</div></div>
+        </div>
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 10l3-3 3 3M9 14l3 3 3-3"/></svg></div>
+          <div class="texts"><div class="t1">2 · Take Lift B to Level P6</div><div class="t2">Up 3 floors</div></div>
+        </div>
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div class="texts"><div class="t1">3 · Turn right to Bay 12</div><div class="t2">East side · auto MH 02 AB 1234</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="card" style="display:flex; gap:12px; align-items:center; padding:10px 12px">
+          <div style="width:60px; height:46px; border-radius:var(--r-sm); background:var(--bg-surface); display:grid; place-items:center; flex:none">
+            <svg class="i i-20 i-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-7 7"/></svg>
+          </div>
+          <div style="flex:1"><div class="t-headline">Santosh sent a photo</div><div class="t-sub">His auto at Bay 12</div></div>
+          <button style="width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line-strong); display:grid; place-items:center; background:var(--bg-card); flex:none" aria-label="Call Santosh" data-toast="This would open your phone's dialler">
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l3-1 2 5-2 1a10 10 0 0 0 5 5l1-2 5 2-1 3a3 3 0 0 1-3 2A14 14 0 0 1 3 7a3 3 0 0 1 2-3z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C6">I'm at Bay 12</button>
+      <button class="btn btn-tonal btn-m" style="margin-top:8px" data-sheet="C5a">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M9 7l1.5-2h3L15 7"/></svg>
+        Send a photo of where I am
+      </button>
+    </div>
+  </section>
+
+  <!-- C6 Meet at Bay 12 (auto → C7) -->
+  <section class="screen" data-screen="C6" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:14px"><h1 style="font-size:26px">At Bay 12</h1></div>
+      <div class="sec-label t-label">Find this number plate</div>
+      <div class="pad"><div class="plate-big"><div class="n">MH 02 AB 1234</div><div class="s">Black and yellow auto · Santosh</div></div></div>
+      <div class="sec-label t-label">Tell Santosh this code</div>
+      <div class="pad">
+        <div class="code-big"><div class="box">4</div><div class="box">7</div><div class="box">2</div><div class="box">1</div></div>
+        <p class="t-sub" style="margin:10px 2px 0">The trip starts only when he enters it.</p>
+      </div>
+      <div class="sec-label t-label">Load your bags</div>
+      <div class="pad">
+        <div class="bag-row">
+          <div class="bag-chip">
+            <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+            <span>2 big bags</span>
+          </div>
+          <div class="bag-chip">
+            <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="12" height="12" rx="1.5"/><path d="M10 8V6a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2"/></svg>
+            <span>1 small bag</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-disabled" disabled>Waiting for Santosh to start</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-sheet="X10">This isn't my auto</button>
+    </div>
+  </section>
+
+  <!-- C7 On the trip (auto → C8 sheet) -->
+  <section class="screen" data-screen="C7" hidden>
+    <div class="main" style="padding:0">
+      <div class="map">
+        <svg class="route" viewBox="0 0 402 360" preserveAspectRatio="none">
+          <path d="M80 300 L80 180 L300 180 L300 110" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink)"/>
+        </svg>
+        <div class="dest" style="left:300px; top:110px">
+          <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home
+        </div>
+        <div class="dot" style="left:80px; top:300px">
+          <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        </div>
+      </div>
+      <div class="trip-card">
+        <div style="display:flex; align-items:flex-start; gap:12px">
+          <div style="flex:1">
+            <div class="t-title2" style="font-weight:700">Home · Chakala, Andheri East</div>
+            <div class="t-sub" style="margin-top:4px">Reaching about 23:24</div>
+          </div>
+          <div class="eta"><span class="n">28</span><span class="u">min</span></div>
+        </div>
+        <div class="banner accent" style="padding:12px 14px">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <div><div class="t-headline" style="color:var(--ink)">₹420 paid · fare locked</div><div class="t-sub" style="color:var(--ink-mute); margin-top:2px">Nothing more to pay, not even tolls</div></div>
+        </div>
+        <div class="grid-2">
+          <button class="btn btn-secondary btn-m" style="gap:8px; padding:0 12px" data-sheet="X12">
+            <svg class="i i-20 i-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg>
+            <span>SOS</span>
+          </button>
+          <button class="btn btn-secondary btn-m" style="gap:8px; padding:0 10px; font-size:13px; line-height:16px; text-align:left" data-sheet="X11">
+            <svg class="i i-20 i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 18H2L12 2z"/><path d="M12 10v4M12 17h.01"/></svg>
+            <span>Driver asked for extra money</span>
+          </button>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; color:var(--accent); font-size:14px; font-weight:600; padding-top:2px">
+          <svg class="i i-16 i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Mom is following this ride
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C9 Rate your ride -->
+  <section class="screen" data-screen="C9" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Close" data-go="B1"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+      <div style="text-align:center; margin-top:4px">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--bg-surface); display:inline-grid; place-items:center">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-mute)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <h1 class="t-large" style="margin:14px 20px 0">How was your ride with Santosh?</h1>
+      </div>
+      <div class="stars" id="stars">
+        <button aria-pressed="true" aria-label="1 star"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg></button>
+        <button aria-pressed="true" aria-label="2 stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg></button>
+        <button aria-pressed="true" aria-label="3 stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg></button>
+        <button aria-pressed="true" aria-label="4 stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg></button>
+        <button aria-pressed="false" aria-label="5 stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg></button>
+      </div>
+      <div class="chips-grid" style="margin-top:14px">
+        <button class="chip sel" data-toggle>On time</button>
+        <button class="chip sel" data-toggle>Helped with bags</button>
+        <button class="chip" data-toggle>Polite</button>
+        <button class="chip" data-toggle>Asked for extra money</button>
+        <button class="chip" data-toggle>Rude</button>
+        <button class="chip" data-toggle>Unsafe driving</button>
+      </div>
+      <p class="t-sub center" style="margin-top:16px">₹420 paid · receipt in Trips</p>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="B1">Done</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-go="M3">Report a problem</button>
+    </div>
+  </section>
+
+  <!-- X0 Edge cases index -->
+  <section class="screen" data-screen="X0" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:14px"><h1 style="font-size:26px">What can go wrong</h1></div>
+      <div class="x-index" style="margin-top:8px">
+        <button class="row" data-go="X1"><div class="texts"><div class="t1">X1 · Flight is late</div></div></button>
+        <button class="row" data-sheet="X2"><div class="texts"><div class="t1">X2 · Bags are taking long</div></div></button>
+        <button class="row" data-sheet="X3"><div class="texts"><div class="t1">X3 · She skips the auto</div></div></button>
+        <button class="row" data-sheet="X4"><div class="texts"><div class="t1">X4 · Driver cancels</div></div></button>
+        <button class="row" data-go="X5"><div class="texts"><div class="t1">X5 · No auto free in the queue</div></div></button>
+        <button class="row" data-go="X6"><div class="texts"><div class="t1">X6 · She is late to the bay</div></div></button>
+        <button class="row" data-go="X7"><div class="texts"><div class="t1">X7 · She never reaches the bay</div></div></button>
+        <button class="row" data-sheet="X8"><div class="texts"><div class="t1">X8 · She cancels before a driver</div></div></button>
+        <button class="row" data-sheet="X9"><div class="texts"><div class="t1">X9 · She cancels after a driver</div></div></button>
+        <button class="row" data-sheet="X10"><div class="texts"><div class="t1">X10 · Wrong auto at the bay</div></div></button>
+        <button class="row" data-sheet="X11"><div class="texts"><div class="t1">X11 · Driver asks for extra money</div></div></button>
+        <button class="row" data-sheet="X12"><div class="texts"><div class="t1">X12 · She feels unsafe (SOS)</div></div></button>
+        <button class="row" data-sheet="X13"><div class="texts"><div class="t1">X13 · Payment fails</div></div></button>
+        <button class="row" data-go="X14"><div class="texts"><div class="t1">X14 · Wrong SMS code</div></div></button>
+        <button class="row" data-go="X15"><div class="texts"><div class="t1">X15 · Location is off</div></div></button>
+        <button class="row" data-go="X16"><div class="texts"><div class="t1">X16 · Short trip (minimum fare)</div></div></button>
+        <button class="row" data-go="X17"><div class="texts"><div class="t1">X17 · At the exit with no booking</div></div></button>
+        <button class="row" data-go="X18"><div class="texts"><div class="t1">X18 · No internet</div></div></button>
+        <button class="row" data-sheet="X19"><div class="texts"><div class="t1">X19 · Bags don't fit an auto</div></div></button>
+        <button class="row" data-sheet="X20"><div class="texts"><div class="t1">X20 · Pool didn't fill</div></div></button>
+      </div>
+      <div style="height:24px"></div>
+    </div>
+  </section>
+
+  <!-- X1 Flight is late (B7 variant with dark banner) -->
+  <section class="screen" data-screen="X1" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Your ride</div><span class="status warn chip-trail">Moved</span></div>
+      <div class="pad">
+        <div class="banner dark" style="align-items:flex-start">
+          <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fff; flex:none"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>
+          <span>Your flight is late. Your ride moved to 23:20. Fare stays ₹420. Nothing to do.</span>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+          <div style="flex:1"><div class="t-headline"><strong>AI 864 · Late</strong></div><div class="t-sub">Now lands 23:20</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="timeline">
+          <div class="step done"><div class="n"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="texts"><div class="t1">Ride locked</div><div class="t2">₹420 paid</div></div></div>
+          <div class="step"><div class="n">2</div><div class="texts"><div class="t1">Your flight lands</div><div class="t2">We send you a message</div></div></div>
+          <div class="step"><div class="n">3</div><div class="texts"><div class="t1">Tap "I have my bags"</div><div class="t2">We call the next auto from the queue</div></div></div>
+          <div class="step"><div class="n">4</div><div class="texts"><div class="t1">Meet at Bay 12</div><div class="t2">Your auto is already there</div></div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:6px">
+        <div class="card" style="padding:0">
+          <div class="card-split" style="padding:0 16px">
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div style="flex:1"><div class="t-headline">Bay 12, P6 East</div><div class="t-sub">About 4 min walk from the belt</div></div></div>
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span><div style="flex:1"><div class="t-headline">2 big + 1 small · 1 person</div><div class="t-sub">Your auto fits these bags</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-secondary" data-sheet="B7a"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>Share with family</button>
+      <button class="btn-link quiet" style="margin-top:4px; text-decoration:underline; text-underline-offset:3px; font-weight:600" data-sheet="X8">Cancel ride</button>
+    </div>
+  </section>
+
+  <!-- X4b Your new driver (Rakesh) -->
+  <section class="screen" data-screen="X4b" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:14px"><h1 style="font-size:26px">Your driver</h1></div>
+      <div class="pad">
+        <div class="card drivercard">
+          <div style="display:flex; gap:14px; align-items:center">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--bg-surface); display:grid; place-items:center">
+              <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-mute)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+            <div>
+              <div class="t-title2" style="font-weight:700">Rakesh</div>
+              <div class="t-sub" style="margin-top:2px; display:flex; gap:4px; align-items:center">
+                <svg class="i i-16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" style="color:var(--ink)"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5L5.5 20.5l2-7L2 9h7z"/></svg>
+                <span style="color:var(--ink-soft)">4.7 · 860 trips</span>
+              </div>
+            </div>
+          </div>
+          <div class="plate-dk">
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+            <div><div class="n">MH 02 CD 5678</div><div class="sub">Black and yellow auto</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+          <div style="flex:1"><div class="t-headline">On the T2 register since 22:05</div><div class="t-sub">0 cancels · 0 refusals in the last 30 days</div></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">Riders say</div>
+      <div class="pad">
+        <div class="chips">
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">Helps with bags</span>
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">On time</span>
+          <span class="chip" style="background:var(--bg-surface); border-color:var(--bg-surface); color:var(--ink)">Polite</span>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="banner accent" style="padding:14px 16px; align-items:center">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>
+          <div style="flex:1"><div class="t-headline" style="color:var(--ink)">Mom is following this ride</div><div class="t-sub" style="color:var(--ink-mute); margin-top:2px">She sees Rakesh, his number plate and your trip</div></div>
+          <span style="width:28px; height:28px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; flex:none"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C5">Ride with Rakesh</button>
+      <div class="btn-link quiet" style="margin-top:4px; text-align:center; color:var(--ink-faint)">No skips left</div>
+    </div>
+  </section>
+
+  <!-- X5 No auto free right now -->
+  <section class="screen" data-screen="X5" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Finding your auto</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; margin-top:8px"><div class="spin lg"></div></div>
+      <div class="state-head" style="text-align:center; margin-top:18px">
+        <h1 style="font-size:22px; line-height:28px; font-weight:800">No auto is free in the T2 queue right now</h1>
+        <p style="margin-top:6px">You get the next one that joins the queue. Your fare stays ₹420.</p>
+      </div>
+      <div class="pad" style="margin-top:6px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:flex-start">
+          <span class="iconchip accent" style="background:var(--bg-card)"><svg class="i i-20 i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <div><div class="t-headline">Wait inside, by Gate 3</div><div class="t-sub" style="margin-top:2px">Lit and staffed, water nearby · from the airport map</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C4">Keep waiting</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-go="B1">Cancel and get ₹420 back</button>
+    </div>
+  </section>
+
+  <!-- X6 Late to the bay (paid waiting state) -->
+  <section class="screen" data-screen="X6" hidden>
+    <div class="main">
+      <div class="topbar">
+        <div style="width:44px"></div>
+        <div class="title">Walk to Bay 12</div>
+        <button class="trail cancel" data-sheet="X9">Cancel</button>
+      </div>
+      <div class="pad">
+        <div class="bay-bar amber">
+          <div class="texts"><div class="t1">Free waiting is over</div><div class="t2">₹1 a minute now · added to your fare</div></div>
+          <div class="time">₹3</div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 18H2L12 2z"/><path d="M12 10v4M12 17h.01"/></svg><span>If you are not at Bay 12 by 22:58, the ride ends and ₹42 goes to Santosh.</span></div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><circle cx="15" cy="12" r="1" fill="currentColor"/></svg></div>
+          <div class="texts"><div class="t1">1 · Exit at Gate 3</div><div class="t2">Arrivals, ground floor</div></div>
+        </div>
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 10l3-3 3 3M9 14l3 3 3-3"/></svg></div>
+          <div class="texts"><div class="t1">2 · Take Lift B to Level P6</div><div class="t2">Up 3 floors</div></div>
+        </div>
+        <div class="dir-row">
+          <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div class="texts"><div class="t1">3 · Turn right to Bay 12</div><div class="t2">East side · auto MH 02 AB 1234</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="card" style="display:flex; gap:12px; align-items:center; padding:10px 12px">
+          <div style="width:60px; height:46px; border-radius:var(--r-sm); background:var(--bg-surface); display:grid; place-items:center; flex:none">
+            <svg class="i i-20 i-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-7 7"/></svg>
+          </div>
+          <div style="flex:1"><div class="t-headline">Santosh sent a photo</div><div class="t-sub">His auto at Bay 12</div></div>
+          <button style="width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line-strong); display:grid; place-items:center; background:var(--bg-card); flex:none" aria-label="Call Santosh" data-toast="This would open your phone's dialler">
+            <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l3-1 2 5-2 1a10 10 0 0 0 5 5l1-2 5 2-1 3a3 3 0 0 1-3 2A14 14 0 0 1 3 7a3 3 0 0 1 2-3z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="C6">I'm at Bay 12</button>
+      <button class="btn btn-tonal btn-m" style="margin-top:8px" data-sheet="C5a">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M9 7l1.5-2h3L15 7"/></svg>
+        Send a photo of where I am
+      </button>
+    </div>
+  </section>
+
+  <!-- X7 Ride ended (you didn't come) -->
+  <section class="screen" data-screen="X7" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:14px"><h1 style="font-size:22px; line-height:28px">Ride ended</h1></div>
+      <div class="pad" style="margin-top:14px"><span class="iconchip lg" style="width:48px; height:48px"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span></div>
+      <div class="pad" style="margin-top:14px">
+        <h2 class="t-large" style="margin:0; font-size:26px">You didn't reach Bay 12 in 10 minutes</h2>
+        <p class="t-callout mute" style="margin:8px 0 0">Santosh waited and was paid for his time. The rest of your money comes back to you.</p>
+      </div>
+      <div class="pad" style="margin-top:16px">
+        <div class="breakdown">
+          <div class="ln"><span class="k">You paid</span><span class="v">₹420</span></div>
+          <div class="ln"><span class="k">Waiting · 5 min</span><span class="v">− ₹5</span></div>
+          <div class="ln"><span class="k">Late fee to driver</span><span class="v">− ₹42</span></div>
+          <div class="ln tot"><span class="k">Back to your UPI</span><span class="v">₹373</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="X17">Get the next auto</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-go="M3">This wasn't my fault</button>
+    </div>
+  </section>
+
+  <!-- X14 Wrong code (A4 variant with error) -->
+  <section class="screen" data-screen="X14" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <div class="pagehead"><h1>Enter the code</h1><p>Sent to +91 98765 43210</p></div>
+      <div class="pad" style="margin-top:16px">
+        <div class="code">
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">3</div>
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">8</div>
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">1</div>
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">4</div>
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">0</div>
+          <div class="box filled" style="border-color:var(--error); color:var(--error)">2</div>
+        </div>
+        <div class="help err" style="margin-top:14px; display:flex; align-items:center; gap:6px">
+          <svg class="i i-16 i-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 18H2L12 2z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <strong>That code is wrong. 2 tries left.</strong>
+        </div>
+        <button class="btn-link quiet" style="justify-content:flex-start; padding:12px 0; width:auto">Resend code</button>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="A5">Verify</button></div>
+    <div class="keypad" aria-hidden="true">
+      <div class="key"><span class="n">1</span></div>
+      <div class="key"><span class="n">2</span><span class="l">ABC</span></div>
+      <div class="key"><span class="n">3</span><span class="l">DEF</span></div>
+      <div class="key"><span class="n">4</span><span class="l">GHI</span></div>
+      <div class="key"><span class="n">5</span><span class="l">JKL</span></div>
+      <div class="key"><span class="n">6</span><span class="l">MNO</span></div>
+      <div class="key"><span class="n">7</span><span class="l">PQRS</span></div>
+      <div class="key"><span class="n">8</span><span class="l">TUV</span></div>
+      <div class="key"><span class="n">9</span><span class="l">WXYZ</span></div>
+      <div class="key empty"></div>
+      <div class="key"><span class="n">0</span></div>
+      <div class="key back"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 5H9L2 12l7 7h13a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M18 9l-6 6M12 9l6 6"/></svg></div>
+    </div>
+  </section>
+
+  <!-- X15 Location is off -->
+  <section class="screen" data-screen="X15" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <div class="pad" style="margin-top:4px"><span class="iconchip lg" style="width:48px; height:48px"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span></div>
+      <div class="pad" style="margin-top:14px">
+        <h1 class="t-large" style="margin:0; font-size:26px">Turn on location for walking directions</h1>
+        <p class="t-callout mute" style="margin:8px 0 0">You can still book. Without location we show directions to your bay as a simple list.</p>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-go="A7">Open Settings</button>
+      <button class="btn-link" style="margin-top:4px" data-go="A7">Continue without</button>
+    </div>
+  </section>
+
+  <!-- X16 Short trip (minimum fare) -->
+  <section class="screen" data-screen="X16" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Ride home</div></div>
+      <div class="pad">
+        <div class="card" style="padding:4px 16px">
+          <button class="row" style="padding:14px 0; width:100%" data-go="B2">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+            <div class="texts"><div class="t1">AI 864 · lands T2 22:40</div><div class="t2">Today · tap to change</div></div>
+            <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <button class="row" style="padding:14px 0; width:100%; border-top:1px solid var(--line)" data-go="B3a">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+            <div class="texts"><div class="t1">Sahar Village, Andheri East</div><div class="t2">2 km · tap to change</div></div>
+            <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Short trips from T2 have a set minimum, so autos don't refuse them. Amount to be tested with riders and drivers.</span></div>
+      </div>
+      <div class="pad" style="margin-top:10px"><button class="btn-link quiet" style="justify-content:flex-start; padding-left:0; width:auto; font-weight:700; color:var(--ink)" data-sheet="B3mi">Why a minimum fare?</button></div>
+      <div class="sec-label t-label">What are you carrying?</div>
+      <div>
+        <div class="form-row"><div class="texts"><div class="t1">Big bags</div><div class="t2">Check-in</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">2</div><button aria-label="Plus">+</button></div></div>
+        <div class="form-row"><div class="texts"><div class="t1">Small bags</div><div class="t2">Cabin</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">1</div><button aria-label="Plus">+</button></div></div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="option selected" aria-pressed="true">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div class="texts" style="flex:1">
+            <div class="row-split"><div class="t1">Auto</div><div class="price">₹60</div></div>
+            <div><span class="chip-minfare">Hub minimum fare</span></div>
+            <div class="t2">Fits 2 big + 1 small · tolls and bags included</div>
+            <div class="t2">Pickup: Bay 12, P6 East · about 4 min walk from the belt</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="price-bar">
+      <div class="left"><div class="big">₹60</div><div class="sub">All-in · nothing more to pay</div></div>
+      <button class="btn btn-primary" data-go="B5">Continue</button>
+    </div>
+  </section>
+
+  <!-- X17 At the exit now (instant book, no flight) -->
+  <section class="screen" data-screen="X17" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Next auto from the queue</div></div>
+      <div class="pad">
+        <div class="card" style="padding:4px 16px">
+          <div class="row" style="padding:14px 0">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+            <div class="texts"><div class="t1">From: T2 arrivals</div><div class="t2">You are here</div></div>
+          </div>
+          <button class="row" style="padding:14px 0; width:100%; border-top:1px solid var(--line)" data-go="B3a">
+            <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+            <div class="texts"><div class="t1">Home · Chakala, Andheri East</div><div class="t2">9 km · tap to change</div></div>
+            <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sec-label t-label">What are you carrying?</div>
+      <div>
+        <div class="form-row"><div class="texts"><div class="t1">Big bags</div><div class="t2">Check-in</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">2</div><button aria-label="Plus">+</button></div></div>
+        <div class="form-row"><div class="texts"><div class="t1">Small bags</div><div class="t2">Cabin</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">1</div><button aria-label="Plus">+</button></div></div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="option selected" aria-pressed="true">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div class="texts" style="flex:1">
+            <div class="row-split"><div class="t1">Next auto in the queue</div><div class="price">₹420</div></div>
+            <div class="t2">Pickup: Bay 12, P6 East · about 4 min walk</div>
+            <div class="t2">No choosing, no refusing: autos go in queue order</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="price-bar">
+      <div class="left"><div class="big">₹420</div><div class="sub">All-in · nothing more to pay</div></div>
+      <button class="btn btn-primary" data-go="C3">Pay and get auto</button>
+    </div>
+  </section>
+
+  <!-- X18 No internet (B8 with offline banner) -->
+  <section class="screen has-tabs" data-screen="X18" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:26px">Hi Ananya</h1></div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner offline">
+          <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 13a9 9 0 0 1 12 0"/><path d="M2 9c1.5-1.3 3.2-2.3 5-3M22 9c-1.5-1.3-3.2-2.3-5-3"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+          <div><strong>You're offline.</strong> Your ride is still booked. We'll update this when you're back online.</div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <button class="card dark" style="width:100%; text-align:left; padding:18px" data-go="B7">
+          <div class="row-split" style="margin-bottom:10px">
+            <span class="label" style="font-size:11px; letter-spacing:.14em; font-weight:700; color:rgba(255,255,255,.65); text-transform:uppercase">Your ride home</span>
+            <span class="status" style="background:rgba(255,255,255,.14); color:#fff">On time</span>
+          </div>
+          <div style="font-size:24px; font-weight:800; letter-spacing:-.02em; line-height:30px">AI 864 lands 22:40</div>
+          <div style="color:rgba(255,255,255,.78); margin-top:6px; font-size:15px">Bay 12, P6 East · ₹420 paid</div>
+          <div style="margin-top:12px; display:inline-flex; gap:6px; align-items:center; color:var(--accent-on-dark); font-weight:600">View ride <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <button class="card" style="display:flex; align-items:center; gap:14px; width:100%; text-align:left; padding:14px 16px" data-go="X17">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="12" height="16" rx="1"/><path d="M12 12h.01"/></svg></span>
+          <div style="flex:1"><div class="t-headline">At the exit now?</div><div class="t-sub">Get the next car from the T2 queue</div></div>
+          <svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner accent" style="align-items:center">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>
+          <div><div class="t-headline" style="color:var(--ink)">Mom can follow this ride</div><div class="t-sub" style="color:var(--ink-mute); margin-top:2px">Shared from booking to your door</div></div>
+        </div>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab" data-go="M1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab" data-go="M3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab" data-go="M6"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- A7b Confirm your Home -->
+  <section class="screen" data-screen="A7b" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Save Home</div><button class="trail" style="color:var(--ink-mute); text-decoration:underline; text-underline-offset:3px; font-weight:600; background:none; border:0; cursor:pointer" data-go="B1">Skip</button></div>
+      <div class="pad" style="margin-top:4px">
+        <div class="mini-map">
+          <svg viewBox="0 0 362 170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" width="100%" height="170">
+            <rect width="362" height="170" fill="#EAF2F0"/>
+            <g stroke="#C4D4D1" stroke-width="1" fill="none">
+              <path d="M-20 40 L380 40"/><path d="M-20 90 L380 90"/><path d="M-20 140 L380 140"/>
+              <path d="M60 -10 L60 180"/><path d="M160 -10 L160 180"/><path d="M260 -10 L260 180"/>
+            </g>
+            <path d="M-10 90 L160 90 L160 140 L380 140" stroke="#9BB7B2" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M-10 90 L160 90 L160 140 L380 140" stroke="#D7E3E1" stroke-width="2" stroke-dasharray="6 8" fill="none" stroke-linecap="round"/>
+            <circle cx="180" cy="60" r="24" fill="rgba(13,92,99,.1)"/>
+            <circle cx="180" cy="60" r="12" fill="var(--accent)"/>
+            <path d="M180 50 L180 70 M170 60 L190 60" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="pad vgap-16" style="margin-top:16px">
+        <div class="field">
+          <div class="input focused" style="flex-direction:column; align-items:flex-start; height:auto; padding:10px 16px">
+            <div style="font-size:12px; color:var(--ink-mute)">Home</div>
+            <input value="Chakala, Andheri East, Mumbai 400099" aria-label="Address" style="padding:0; font-weight:600">
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">Flat, floor, building (optional)</div>
+          <div class="input"><input value="Flat 302, Sai Kripa CHS" aria-label="Flat, floor, building"></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">Save as</div>
+      <div class="pad">
+        <div class="save-as">
+          <button class="chip sel" data-save-as="home"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</button>
+          <button class="chip" data-save-as="work"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="1.5"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>Work</button>
+          <button class="chip" data-save-as="other"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>Other</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="B1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Save Home</button></div>
+  </section>
+
+  <!-- B3p Pool with your flight · Same flight -->
+  <section class="screen" data-screen="B3p" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Pool with your flight</div></div>
+      <div class="seg" role="tablist">
+        <button class="seg-tab on" role="tab" aria-selected="true">Same flight</button>
+        <button class="seg-tab" role="tab" data-go="B3pn">To a point</button>
+        <button class="seg-tab" role="tab" data-go="B3pi">Invite</button>
+      </div>
+      <div class="sec-label t-label">Your co-riders · AI 864</div>
+      <div>
+        <div class="corider">
+          <div class="av"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">Meera</div><div class="t2">4.9 · Marol</div></div>
+          <span class="chip-right">Dropped first</span>
+        </div>
+        <div class="corider" style="border-top:1px solid var(--line)">
+          <div class="av me"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">You</div><div class="t2">Chakala, Andheri East</div></div>
+          <span class="chip-right">Dropped second</span>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="farelines">
+          <div class="ln hero"><span class="k">You pay</span><span class="v">₹380</span></div>
+          <div class="ln"><span class="k">You save vs solo cab</span><span class="v">₹160</span></div>
+          <div class="ln"><span class="k">Most extra time</span><span class="v">10 min</span></div>
+          <div class="ln"><span class="k">Drop order</span><span class="v">Fixed, shown above</span></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg><div><strong style="color:var(--ink)">Solo is your fallback</strong><div>If the pool doesn't fill by the time you collect your bags, we switch you to solo automatically.</div></div></div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-sheet="B4p">Join this pool · ₹380</button>
+      <button class="btn-link" data-back style="margin-top:4px">Back to solo</button>
+    </div>
+  </section>
+
+  <!-- B3pn Non-stop to a point -->
+  <section class="screen" data-screen="B3pn" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Pool with your flight</div></div>
+      <div class="seg" role="tablist">
+        <button class="seg-tab" role="tab" data-go="B3p">Same flight</button>
+        <button class="seg-tab on" role="tab" aria-selected="true">To a point</button>
+        <button class="seg-tab" role="tab" data-go="B3pi">Invite</button>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="card" style="display:flex; gap:12px; align-items:flex-start; padding:14px 16px">
+          <span class="iconchip" style="background:var(--bg-card); border:0"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V3h12l-2 4 2 4H5"/></svg></span>
+          <div><div class="t-headline">Non-stop to Andheri station (East)</div><div class="t-sub" style="margin-top:3px">No stops on the way · 3 riders from AI 864</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="farelines">
+          <div class="ln hero"><span class="k">You pay</span><span class="v">₹200</span></div>
+          <div class="ln"><span class="k">You save vs solo auto</span><span class="v">₹220</span></div>
+          <div class="ln"><span class="k">From the point to your home</span><span class="v">1.5 km</span></div>
+          <div class="ln"><span class="k">Leaves</span><span class="v">When all 3 have their bags</span></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Auto stand at the drop point. Your bags come with you to the point.</span></div>
+      </div>
+      <div class="pad" style="margin-top:10px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg><div><strong style="color:var(--ink)">Solo is your fallback</strong><div>If the pool doesn't fill by the time you collect your bags, we switch you to solo automatically.</div></div></div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-sheet="B4p">Join this pool · ₹200</button>
+      <button class="btn-link" data-back style="margin-top:4px">Back to solo</button>
+    </div>
+  </section>
+
+  <!-- B3pi Invite someone you know -->
+  <section class="screen" data-screen="B3pi" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Pool with your flight</div></div>
+      <div class="seg" role="tablist">
+        <button class="seg-tab" role="tab" data-go="B3p">Same flight</button>
+        <button class="seg-tab" role="tab" data-go="B3pn">To a point</button>
+        <button class="seg-tab on" role="tab" aria-selected="true">Invite</button>
+      </div>
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:24px">Ride with someone you know</h1><p>Invite a friend or colleague landing around the same time. You split the fare.</p></div>
+      <div class="pad" style="margin-top:14px">
+        <div class="farelines">
+          <div class="ln hero"><span class="k">Cab for both of you</span><span class="v">₹540</span></div>
+          <div class="ln"><span class="k">Each of you pays</span><span class="v">₹270</span></div>
+          <div class="ln"><span class="k">Drop order</span><span class="v" style="font-weight:700">Nearest first, shown before you pay</span></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg><span>They open your link, add their flight and bags, and join this ride.</span></div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-toast="Invite link copied">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>
+        Share invite link
+      </button>
+      <button class="btn-link" data-back style="margin-top:4px">Back to solo</button>
+    </div>
+  </section>
+
+  <!-- B3pw Women-only pool -->
+  <section class="screen" data-screen="B3pw" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Women-only pool</div></div>
+      <div class="pad">
+        <div class="banner accent" style="align-items:center">
+          <svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <div class="t-headline" style="color:var(--ink)">Women from your flight are pooling to your area</div>
+        </div>
+      </div>
+      <div class="sec-label t-label">Your co-riders · AI 864</div>
+      <div>
+        <div class="corider">
+          <div class="av"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">Meera</div><div class="t2">4.9 · Marol</div></div>
+          <span class="chip-right">Dropped first</span>
+        </div>
+        <div class="corider" style="border-top:1px solid var(--line)">
+          <div class="av"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">Sana</div><div class="t2">4.8 · Saki Naka</div></div>
+          <span class="chip-right">Dropped second</span>
+        </div>
+        <div class="corider" style="border-top:1px solid var(--line)">
+          <div class="av me"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">You</div><div class="t2">Chakala, Andheri East</div></div>
+          <span class="chip-right">Dropped third</span>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <div class="farelines">
+          <div class="ln hero"><span class="k">You pay</span><span class="v">₹380</span></div>
+          <div class="ln"><span class="k">You save vs solo cab</span><span class="v">₹160</span></div>
+          <div class="ln"><span class="k">Most extra time</span><span class="v">10 min</span></div>
+          <div class="ln"><span class="k">Driver</span><span class="v">Woman, if available</span></div>
+        </div>
+      </div>
+      <p class="t-foot" style="margin:12px 20px 0">Shown because women-only options are on in Profile.</p>
+    </div>
+    <div class="footer">
+      <button class="btn btn-primary" data-sheet="B4p">Join this pool · ₹380</button>
+      <button class="btn-link" data-back style="margin-top:4px">Back to solo</button>
+    </div>
+  </section>
+
+  <!-- B3w Other ways out of T2 (info only) -->
+  <section class="screen" data-screen="B3w" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Other ways out of T2</div></div>
+      <div class="pad"><p class="t-callout mute" style="margin:0 0 14px">For information only. Walk times are from the arrivals exit, from the airport map.</p></div>
+      <div class="pad vgap">
+        <div class="info-card">
+          <div class="head"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 6v12M16 6v12"/></svg>Premium taxi counter</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>Outside arrivals exit</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>About 1 min walk</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Around ₹1,000</div>
+        </div>
+        <div class="info-card">
+          <div class="head"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 6v12M16 6v12"/></svg>Prepaid taxi booth</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>Arrivals hall, near Gate 3</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>About 2 min walk</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Fixed at the booth</div>
+        </div>
+        <div class="info-card">
+          <div class="head"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V9l2-4h10l2 4v7"/><circle cx="8" cy="16" r="2"/><circle cx="16" cy="16" r="2"/></svg>Other ride apps</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>P4 West or P6 parking</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>10 to 15 min walk</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>App fare</div>
+        </div>
+        <div class="info-card">
+          <div class="head"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>Metro Line 1</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>Marol Naka station</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>Not walkable with bags</div>
+          <div class="meta"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>₹20 to 40</div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+  </section>
+
+  <!-- ====== Section 4 · Trips, Help, Profile tabs ====== -->
+
+  <!-- M1 Trips -->
+  <section class="screen has-tabs" data-screen="M1" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:28px">Trips</h1></div>
+      <div class="sec-label t-label">Past</div>
+      <button class="row m-row" data-go="M2">
+        <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+        <div class="texts"><div class="t1">T2 &rarr; Home</div><div class="t2">Today, 22:52 · Santosh · ₹420</div></div>
+      </button>
+      <div class="pad" style="margin-top:16px">
+        <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>Every trip keeps its receipt, the driver's name and auto number.</span></div>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab" data-go="B1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab" data-go="M3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab" data-go="M6"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- M2 Receipt -->
+  <section class="screen" data-screen="M2" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Receipt</div></div>
+      <div class="pad">
+        <div class="card" style="padding:0">
+          <div class="card-split" style="padding:0 16px">
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div style="flex:1"><div class="t-headline">Bay 12, P6 East · T2</div><div class="t-sub">22:52</div></div></div>
+            <div><span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span><div style="flex:1"><div class="t-headline">Chakala, Andheri East</div><div class="t-sub">23:24</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div><div class="t-headline">Santosh · MH 02 AB 1234</div><div class="t-sub">You rated 4 stars</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:16px">
+        <div class="fsum">
+          <div class="ln"><span class="k">Ride fare · 9 km</span><span class="v">₹370</span></div>
+          <div class="ln"><span class="k">Airport parking fee</span><span class="v">₹50</span></div>
+          <div class="ln"><span class="k">Tolls</span><span class="v">₹0</span></div>
+          <div class="ln"><span class="k">Bags</span><span class="v">Included</span></div>
+          <div class="ln tot"><span class="k">Paid by UPI</span><span class="v">₹420</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn btn-secondary" data-toast="Receipt would be downloaded">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+        Download receipt
+      </button>
+      <button class="btn-link quiet" style="margin-top:4px" data-go="M3">Get help with this trip</button>
+    </div>
+  </section>
+
+  <!-- M3 Help -->
+  <section class="screen has-tabs" data-screen="M3" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:28px">Help</h1></div>
+      <div class="pad" style="margin-top:4px">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div><div class="t-headline">Today's trip: T2 &rarr; Home</div><div class="t-sub">Santosh · MH 02 AB 1234</div></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">What went wrong?</div>
+      <div>
+        <button class="row m-row" data-go="M4"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span><div class="texts"><div class="t1">I left a bag in the auto</div></div></button>
+        <button class="row m-row" data-go="M4"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span><div class="texts"><div class="t1">Driver asked for extra money</div></div></button>
+        <button class="row m-row" data-go="M4"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span><div class="texts"><div class="t1">Driver didn't come</div></div></button>
+        <button class="row m-row" data-sheet="X12"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="texts"><div class="t1">I felt unsafe</div></div></button>
+        <button class="row m-row" data-go="M4"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><div class="texts"><div class="t1">Fare or refund</div></div></button>
+        <button class="row m-row" data-go="M4"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg></span><div class="texts"><div class="t1">Something else</div></div></button>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab" data-go="B1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab" data-go="M1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab" data-go="M6"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- M4 Left a bag -->
+  <section class="screen" data-screen="M4" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="title">Left a bag</div></div>
+      <div class="pad">
+        <div class="card filled" style="display:flex; gap:12px; align-items:center">
+          <span class="iconchip" style="background:var(--bg-card)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <div><div class="t-headline">T2 &rarr; Home · today</div><div class="t-sub">Santosh · MH 02 AB 1234</div></div>
+        </div>
+      </div>
+      <div class="sec-label t-label">Which bag?</div>
+      <div class="pad">
+        <div class="chips">
+          <button class="chip sel" data-which-bag>Big bag</button>
+          <button class="chip" data-which-bag>Small bag</button>
+          <button class="chip" data-which-bag>Something else</button>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:16px">
+        <div class="field">
+          <div class="label" style="margin-bottom:6px">What does it look like?</div>
+          <div class="input"><input value="Black trolley, red tag" aria-label="What does it look like"></div>
+          <p class="help" style="margin-top:10px">We call Santosh right away. This report is added to the trip record.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="M5">Send report</button></div>
+  </section>
+
+  <!-- M5 We're on it -->
+  <section class="screen" data-screen="M5" hidden>
+    <div class="main">
+      <div class="topbar"><button class="back" aria-label="Close" data-go="B1"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+      <div class="pad">
+        <span class="iconchip ink" style="width:56px; height:56px"><svg class="i i-28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M20 6L9 17l-5-5"/></svg></span>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <h1 class="t-large" style="margin:0; font-size:28px">We're on it</h1>
+        <p class="t-callout mute" style="margin:6px 0 0">Priya from our support team has your case. You get an SMS at every step.</p>
+      </div>
+      <div class="pad" style="margin-top:18px">
+        <div class="card" style="padding:16px">
+          <div class="t-label" style="margin-bottom:10px">Case #4821 · Left a bag</div>
+          <div class="timeline">
+            <div class="step done"><div class="n"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="texts"><div class="t1">Reported</div><div class="t2">23:30</div></div></div>
+            <div class="step done"><div class="n"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="texts"><div class="t1">Priya is handling it</div><div class="t2">23:31</div></div></div>
+            <div class="step"><div class="n"></div><div class="texts"><div class="t1">Santosh contacted</div><div class="t2">In progress</div></div></div>
+            <div class="step"><div class="n"></div><div class="texts"><div class="t1">Bag returned to you</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="B1">Done</button></div>
+  </section>
+
+  <!-- M6 Profile -->
+  <section class="screen has-tabs" data-screen="M6" hidden>
+    <div class="main">
+      <div class="pagehead" style="padding-top:16px"><h1 style="font-size:28px">Profile</h1></div>
+      <div style="margin-top:4px">
+        <div class="user-card">
+          <div class="av"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="texts"><div class="t1">Ananya Desai</div><div class="t2">+91 98765 43210</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <button class="row m-row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
+          <div class="texts"><div class="t1">Saved places</div><div class="t2">Home</div></div>
+        </button>
+        <button class="row m-row" data-sheet="B7a">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg></span>
+          <div class="texts"><div class="t1">People who follow my rides</div><div class="t2">Mom</div></div>
+        </button>
+        <button class="row m-row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l-5 8 5 8M16 4l5 8-5 8"/><path d="M12 7l0 10"/></svg></span>
+          <div class="texts"><div class="t1">Payment</div><div class="t2">UPI · ananya@okbank</div></div>
+        </button>
+        <button class="row m-row" data-go="A2">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+          <div class="texts"><div class="t1">Language</div><div class="t2">English</div></div>
+        </button>
+        <button class="row m-row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span>
+          <div class="texts"><div class="t1">My usual bags</div><div class="t2">2 big + 1 small</div></div>
+        </button>
+        <div class="row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+          <div class="texts"><div class="t1">Women-only pool options</div><div class="t2">On · only you see this</div></div>
+          <button class="switch on" role="switch" aria-checked="true" aria-label="Women-only pool options" data-switch></button>
+        </div>
+        <button class="row m-row">
+          <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <div class="texts"><div class="t1">Safety</div><div class="t2">SOS, PIN for every trip</div></div>
+        </button>
+      </div>
+      <div class="pad" style="margin-top:14px">
+        <button class="btn-link" style="justify-content:flex-start; padding:12px 0; width:auto; font-weight:700; color:var(--ink)" data-sheet="MLogout">Log out</button>
+      </div>
+    </div>
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab" data-go="B1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="lbl">Home</span></button>
+      <button class="tab" data-go="M1"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span class="lbl">Trips</span></button>
+      <button class="tab" data-go="M3"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 .9-1 1.7M12 17h.01"/></svg><span class="lbl">Help</span></button>
+      <button class="tab on" aria-current="page"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="lbl">Profile</span></button>
+    </nav>
+  </section>
+
+  <!-- ====== Section 5 · No-app lane (W1–W4) ====== -->
+
+  <!-- W1 QR poster at the exit (physical) -->
+  <section class="screen wa" data-screen="W1" hidden>
+    <div class="main">
+      <button class="poster" data-go="W2" style="width:calc(100% - 40px); border:0; text-align:center" aria-label="Scan the poster">
+        <h2>No app? Get the next auto here</h2>
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="28" height="28" fill="none" stroke="currentColor" stroke-width="4"/>
+            <rect x="12" y="12" width="12" height="12" fill="currentColor"/>
+            <rect x="68" y="4" width="28" height="28" fill="none" stroke="currentColor" stroke-width="4"/>
+            <rect x="76" y="12" width="12" height="12" fill="currentColor"/>
+            <rect x="4" y="68" width="28" height="28" fill="none" stroke="currentColor" stroke-width="4"/>
+            <rect x="12" y="76" width="12" height="12" fill="currentColor"/>
+            <rect x="40" y="4" width="6" height="6" fill="currentColor"/>
+            <rect x="50" y="4" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="14" width="6" height="6" fill="currentColor"/>
+            <rect x="60" y="14" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="26" width="6" height="6" fill="currentColor"/>
+            <rect x="4" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="14" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="24" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="50" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="68" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="78" y="40" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="50" width="6" height="6" fill="currentColor"/>
+            <rect x="60" y="50" width="6" height="6" fill="currentColor"/>
+            <rect x="88" y="50" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="60" width="6" height="6" fill="currentColor"/>
+            <rect x="50" y="60" width="6" height="6" fill="currentColor"/>
+            <rect x="70" y="60" width="6" height="6" fill="currentColor"/>
+            <rect x="80" y="60" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="70" width="6" height="6" fill="currentColor"/>
+            <rect x="60" y="70" width="6" height="6" fill="currentColor"/>
+            <rect x="70" y="70" width="6" height="6" fill="currentColor"/>
+            <rect x="88" y="70" width="6" height="6" fill="currentColor"/>
+            <rect x="50" y="80" width="6" height="6" fill="currentColor"/>
+            <rect x="70" y="80" width="6" height="6" fill="currentColor"/>
+            <rect x="80" y="80" width="6" height="6" fill="currentColor"/>
+            <rect x="40" y="90" width="6" height="6" fill="currentColor"/>
+            <rect x="60" y="90" width="6" height="6" fill="currentColor"/>
+            <rect x="88" y="90" width="6" height="6" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="caption">Scan with your phone camera</div>
+        <div class="fare">Fixed fare · next auto in the queue · pay by UPI, card, or cash at this counter</div>
+        <div class="langs">English · <span lang="hi" style="font-family:'Noto Sans Devanagari',serif">हिंदी</span> · <span lang="mr" style="font-family:'Noto Sans Devanagari',serif">मराठी</span></div>
+      </button>
+      <div class="counter-row">
+        <div class="ico"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 6v12M16 6v12"/></svg></div>
+        <div class="texts"><div class="t1">Staffed counter next to this poster</div><div class="t2">Book here if your phone is out of charge</div></div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+  </section>
+
+  <!-- W2 Web: where to -->
+  <section class="screen" data-screen="W2" hidden>
+    <div class="main">
+      <div class="browser-bar">
+        <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        fixride.in/t2
+      </div>
+      <div class="pad" style="margin-top:14px"><h1 class="t-large" style="margin:0; font-size:24px">Ride home from T2</h1></div>
+      <div class="pad" style="margin-top:14px">
+        <div class="chips">
+          <button class="chip sel" data-wa-lang="en">English</button>
+          <button class="chip" data-wa-lang="hi" lang="hi" style="font-family:'Noto Sans Devanagari',serif">हिंदी</button>
+          <button class="chip" data-wa-lang="mr" lang="mr" style="font-family:'Noto Sans Devanagari',serif">मराठी</button>
+        </div>
+      </div>
+      <div class="web-field">
+        <div class="label">Going to</div>
+        <div class="input"><span class="adorn" style="margin-right:10px"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></span><input value="Chakala, Andheri East" aria-label="Going to"></div>
+      </div>
+      <div style="margin-top:4px">
+        <div class="form-row"><div class="texts"><div class="t1">Big bags</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">2</div><button aria-label="Plus">+</button></div></div>
+        <div class="form-row"><div class="texts"><div class="t1">Small bags</div></div><div class="stepper"><button aria-label="Minus">−</button><div class="val">1</div><button aria-label="Plus">+</button></div></div>
+      </div>
+      <div class="web-field">
+        <div class="label">Phone for WhatsApp or SMS updates</div>
+        <div class="input"><span class="prefix">+91</span><input type="tel" value="98765 43210" inputmode="numeric" aria-label="Phone"></div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    <div class="price-bar">
+      <div class="left"><div class="big">₹420</div><div class="sub">Auto · all-in · next in queue</div></div>
+      <button class="btn btn-primary" data-go="W3">Pay ₹420</button>
+    </div>
+  </section>
+
+  <!-- W3 Web: pay -->
+  <section class="screen" data-screen="W3" hidden>
+    <div class="main">
+      <div class="browser-bar">
+        <svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        fixride.in/t2/pay
+      </div>
+      <div class="pad" style="margin-top:12px">
+        <h1 class="t-large" style="margin:0; font-size:26px">Pay ₹420</h1>
+        <p class="t-callout mute" style="margin:6px 0 0">Fixed fare. Nothing more to pay to the driver.</p>
+      </div>
+      <div class="pad" style="margin-top:18px">
+        <button class="option pay-opt sel" data-pay="upi">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l-5 8 5 8M16 4l5 8-5 8"/><path d="M12 7l0 10"/></svg></span>
+          <div class="texts"><div class="t1">UPI</div><div class="t2">Any UPI app</div></div>
+          <span class="mark"></span>
+        </button>
+        <button class="option pay-opt" data-pay="card">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>
+          <div class="texts"><div class="t1">Card</div><div class="t2">Debit or credit</div></div>
+          <span class="mark"></span>
+        </button>
+        <button class="option pay-opt" data-pay="cash">
+          <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 6v12M16 6v12"/></svg></span>
+          <div class="texts"><div class="t1">Cash at the counter</div><div class="t2">Only at the staffed counter</div></div>
+          <span class="mark"></span>
+        </button>
+      </div>
+    </div>
+    <div class="footer"><button class="btn btn-primary" data-go="W4">Pay ₹420</button></div>
+  </section>
+
+  <!-- W4 WhatsApp: your auto -->
+  <section class="screen wa" data-screen="W4" hidden>
+    <div class="main">
+      <div class="wa-head">
+        <button class="back" aria-label="Back" data-back><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="ava">F</div>
+        <div class="texts"><div class="name">Fixride</div><div class="sub">Business account</div></div>
+      </div>
+      <div class="wa-msg">
+        <div class="t1">Your auto is ready</div>
+        <div class="body">Santosh · MH 02 AB 1234 · 4.8 stars<br>On the T2 register since 21:52</div>
+        <div class="body" style="margin-top:10px">Go to Bay 12, P6 East:<br>Gate 3 &rarr; Lift B &rarr; Level P6 &rarr; right</div>
+        <div class="code-line">Your code: 4721</div>
+        <div class="body" style="margin-top:4px">₹420 paid. Don't pay anything extra.</div>
+        <div class="ts">22:44</div>
+      </div>
+      <button class="wa-reply" data-go="C7">Track my ride</button>
+      <button class="wa-reply" data-sheet="X11">Driver asked for extra money</button>
+      <button class="wa-reply" data-sheet="X12">SOS</button>
+      <div style="height:16px"></div>
+    </div>
+  </section>
+
+  <!-- ===== OVERLAYS (sheets) ===== -->
+
+  <!-- B3b Other ways home -->
+  <aside class="sheet" data-sheet-screen="B3b" role="dialog" aria-modal="true" aria-labelledby="b3b-t" hidden>
+    <div class="grabber" aria-hidden="true"></div>
+    <h2 id="b3b-t">Other ways home</h2>
+    <div class="sub">All fares are all-in.</div>
+    <button class="option selected">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Auto</div><div class="t2">Fits 2 big + 1 small · Bay 12</div></div><div class="price">₹420</div>
+    </button>
+    <button class="option">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V9l2-4h10l2 4v7"/><circle cx="8" cy="16" r="2"/><circle cx="16" cy="16" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Cab</div><div class="t2">Fits 3 big bags · Bay 14</div></div><div class="price">₹540</div>
+    </button>
+    <button class="option">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V9l2-4h14l2 4v7"/><circle cx="7" cy="16" r="2"/><circle cx="17" cy="16" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Cab XL</div><div class="t2">Fits 4 big bags · Bay 14</div></div><div class="price">₹690</div>
+    </button>
+    <button class="option" data-go="B3p">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+      <div class="texts"><div class="t1">Pool with your flight</div><div class="t2">Save ₹160 · up to 10 min extra · see co-riders first</div></div><div class="price">₹380</div>
+    </button>
+    <button class="option" data-go="B3pw">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+      <div class="texts"><div class="t1">Women-only pool</div><div class="t2">2 women from your flight, going your way</div></div><div class="price">₹380</div>
+    </button>
+    <button class="btn-link quiet" style="padding:16px 0; width:auto; justify-content:flex-start; font-weight:700; color:var(--ink)" data-go="B3w">Other ways out of T2 (info only)</button>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>Done</button></div>
+  </aside>
+
+  <!-- B4 Lock your ride -->
+  <aside class="sheet" data-sheet-screen="B4" role="dialog" aria-modal="true" aria-labelledby="b4-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b4-t">Lock your ride</h2>
+    <div class="sub">AI 864 · Home · 2 big + 1 small · Auto</div>
+    <div class="row-split" style="align-items:flex-end; margin:14px 0 4px">
+      <div><div class="t-hero">₹420</div><div class="t-sub">All-in fare</div></div>
+      <button class="btn-link quiet" style="width:auto; padding:8px 0; font-weight:700; color:var(--ink); text-decoration:underline; text-underline-offset:3px" data-sheet="B4a">What's included</button>
+    </div>
+    <div style="margin-top:10px">
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div class="texts"><div class="t1">Nothing more to pay</div><div class="t2">No cash, tolls or bag charge on top</div></div></div>
+      <button class="row" style="padding:14px 0; width:100%" data-sheet="B4b"><span class="iconchip accent"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="texts"><div class="t1">Ride promise</div><div class="t2">Driver cancels? Next auto, same fare, ₹42 back</div></div><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span><div class="texts"><div class="t1">5 min free wait at the bay</div><div class="t2">Then ₹1 per minute</div></div></div>
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l8 6 8-6M4 6v12h16V6"/><path d="M4 6l8 6 8-6"/></svg></span><div class="texts"><div class="t1">UPI · ananya@okbank</div><div class="t2">Pay from any UPI app</div></div><button class="btn-link quiet" style="width:auto; padding:0 4px">Change</button></div>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-go="B5"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Pay ₹420 and lock</button>
+      <p class="t-foot center" style="margin-top:10px">Free to cancel until a driver is assigned.</p>
+    </div>
+  </aside>
+
+  <!-- B4a What's included -->
+  <aside class="sheet" data-sheet-screen="B4a" role="dialog" aria-modal="true" aria-labelledby="b4a-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b4a-t">What's included</h2>
+    <div class="fsum" style="margin-top:14px">
+      <div class="ln"><span class="k">Ride fare · 9 km</span><span class="v">₹370</span></div>
+      <div class="ln"><span class="k">Airport parking fee</span><span class="v">₹50</span></div>
+      <div class="ln"><span class="k">Tolls on this route</span><span class="v">₹0</span></div>
+      <div class="ln"><span class="k">2 big + 1 small bag</span><span class="v">Included</span></div>
+      <div class="ln tot"><span class="k">You pay</span><span class="v">₹420</span></div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="banner info" style="align-items:flex-start"><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 18H2L12 2z"/><path d="M12 10v4M12 17h.01"/></svg><span>If anyone asks for more money, tap "Driver asked for extra money" during the trip.</span></div>
+    </div>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>Got it</button></div>
+  </aside>
+
+  <!-- B4b Ride promise -->
+  <aside class="sheet" data-sheet-screen="B4b" role="dialog" aria-modal="true" aria-labelledby="b4b-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b4b-t">Our ride promise</h2>
+    <div style="margin-top:4px">
+      <div class="row" style="padding:14px 0; align-items:flex-start"><span class="iconchip accent"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="texts"><div class="t1">If your driver cancels</div><div class="t2">Next auto from the T2 queue, same fare. ₹42 back to you.</div></div></div>
+      <div class="row" style="padding:14px 0; align-items:flex-start"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span><div class="texts"><div class="t1">If you cancel after a driver is assigned</div><div class="t2">You pay ₹42 (10% of fare, up to ₹100)</div></div></div>
+      <div class="row" style="padding:14px 0; align-items:flex-start"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></span><div class="texts"><div class="t1">If you are late</div><div class="t2">5 min free, then ₹1 a minute. After 10 min the ride ends and ₹42 goes to the driver.</div></div></div>
+      <div class="row" style="padding:14px 0; align-items:flex-start"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><div class="texts"><div class="t1">Every driver is on record</div><div class="t2">Logged in the T2 register. His no's and cancels stay on his record.</div></div></div>
+    </div>
+    <p class="t-foot" style="margin:10px 0 0">Fee rules follow the Maharashtra 2026 cab rules.</p>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>Got it</button></div>
+  </aside>
+
+  <!-- B7a Share your ride -->
+  <aside class="sheet" data-sheet-screen="B7a" role="dialog" aria-modal="true" aria-labelledby="b7a-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b7a-t">Share your ride</h2>
+    <div class="sub">They see your driver, auto number and live trip until you reach home.</div>
+    <div style="margin-top:4px">
+      <button class="tile-check on" data-tog>
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+        <div class="texts" style="flex:1"><div class="t-headline">Mom</div><div class="t-sub">+91 98200 ••••• 12</div></div>
+        <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+      </button>
+      <button class="tile-check" data-tog>
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+        <div class="texts" style="flex:1"><div class="t-headline">Rohan</div><div class="t-sub">+91 99300 ••••• 45</div></div>
+        <span class="mark"></span>
+      </button>
+      <button class="tile-check">
+        <span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <div class="texts" style="flex:1"><div class="t-headline">Pick from contacts</div></div>
+      </button>
+    </div>
+    <div class="share-tiles" style="margin-top:12px">
+      <button class="chip share-chip sel" data-share>WhatsApp</button>
+      <button class="chip share-chip" data-share>SMS</button>
+      <button class="chip share-chip" data-share>Copy link</button>
+    </div>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close data-toast="Mom is following this ride"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>Share with Mom</button></div>
+  </aside>
+
+  <!-- C5a Send a photo of where you are -->
+  <aside class="sheet" data-sheet-screen="C5a" role="dialog" aria-modal="true" aria-labelledby="c5a-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="c5a-t">Send a photo of where you are</h2>
+    <div style="margin-top:12px; background:var(--bg-surface); border-radius:var(--r-md); aspect-ratio:362/200; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--ink-mute)">
+      <svg class="i i-28 i-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M9 7l1.5-2h3L15 7"/></svg>
+      <span>Camera view</span>
+    </div>
+    <p class="t-sub" style="margin:12px 0 0">Santosh sees it in his app. Your number stays hidden.</p>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-close data-toast="Photo sent to Santosh">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M9 7l1.5-2h3L15 7"/></svg>
+        Take photo
+      </button>
+    </div>
+  </aside>
+
+  <!-- C8 All bags out? (no scrim close) -->
+  <aside class="sheet" data-sheet-screen="C8" role="dialog" aria-modal="true" aria-labelledby="c8-t" data-no-scrim-close hidden>
+    <div class="grabber"></div>
+    <div class="iconchip ink" style="width:48px; height:48px; margin-bottom:12px"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div>
+    <h2 id="c8-t">You're home</h2>
+    <div class="sub">Before Santosh leaves, check the seat and the boot.</div>
+    <div style="margin-top:14px">
+      <button class="bagcheck on" data-bag>
+        <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+        <span class="label">Big bag 1</span>
+      </button>
+      <button class="bagcheck on" data-bag>
+        <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+        <span class="label">Big bag 2</span>
+      </button>
+      <button class="bagcheck on" data-bag>
+        <span class="mark"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="12" height="12" rx="1.5"/><path d="M10 8V6a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2"/></svg>
+        <span class="label">Small bag</span>
+      </button>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-go="C9">Yes, all 3 bags are out</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-close data-toast="Lost-bag flow is in a later section">A bag is still inside</button>
+    </div>
+  </aside>
+
+  <!-- B4p Lock your pool -->
+  <aside class="sheet" data-sheet-screen="B4p" role="dialog" aria-modal="true" aria-labelledby="b4p-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b4p-t">Lock your pool</h2>
+    <div class="sub">AI 864 · Home · Pool with your flight · 2 big + 1 small</div>
+    <div style="margin:14px 0 4px">
+      <div class="t-hero">₹380</div>
+      <div class="t-sub">All-in fare · cab pool</div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div class="texts"><div class="t1">Nothing more to pay</div><div class="t2">No cash, tolls or bag charge on top</div></div></div>
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><div class="texts"><div class="t1">Pool doesn't fill?</div><div class="t2">We switch you to solo. Your fare stays ₹380.</div></div></div>
+      <button class="row" style="padding:14px 0; width:100%" data-sheet="B4b"><span class="iconchip accent"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="texts"><div class="t1">Ride promise</div><div class="t2">Driver cancels? Next car, same fare, money back</div></div><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l8 6 8-6M4 6v12h16V6"/></svg></span><div class="texts"><div class="t1">UPI · ananya@okbank</div><div class="t2">Pay from any UPI app</div></div><button class="btn-link quiet" style="width:auto; padding:0 4px">Change</button></div>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-go="B5"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Pay ₹380 and lock</button>
+    </div>
+  </aside>
+
+  <!-- B3mi Why a minimum hub fare? -->
+  <aside class="sheet" data-sheet-screen="B3mi" role="dialog" aria-modal="true" aria-labelledby="b3mi-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="b3mi-t">Why a minimum hub fare?</h2>
+    <div class="sub">Drivers wait a long time in the T2 queue for each trip. A minimum fare makes a short trip worth taking, so no one refuses you.</div>
+    <div style="margin-top:4px">
+      <div class="row" style="padding:14px 0"><div class="texts" style="flex:1"><div class="t1" style="font-weight:400">Distance fare (2 km)</div></div><div style="font-weight:700">₹38</div></div>
+      <div class="row" style="padding:14px 0; border-top:1px solid var(--line)"><div class="texts" style="flex:1"><div class="t1">Minimum hub fare</div></div><div style="font-weight:800; font-size:18px">₹60</div></div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="banner accent" style="align-items:flex-start"><svg class="i i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg><div><strong style="color:var(--ink)">Short trips cannot be refused</strong><div style="color:var(--ink-mute); font-size:14px; margin-top:2px">Refusals are logged on the driver's record.</div></div></div>
+    </div>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>Got it</button></div>
+  </aside>
+
+  <!-- X19 Bags don't fit an auto -->
+  <aside class="sheet" data-sheet-screen="X19" role="dialog" aria-modal="true" aria-labelledby="x19-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="x19-t">Ways home</h2>
+    <div class="sub">You have 3 big bags. All fares are all-in.</div>
+    <button class="option selected">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V9l2-4h10l2 4v7"/><circle cx="8" cy="16" r="2"/><circle cx="16" cy="16" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Cab</div><div class="t2">Fits 3 big bags · Bay 14</div></div>
+      <div class="price">₹540</div>
+      <span style="width:22px; height:22px; border-radius:50%; background:var(--ink); margin-left:10px; flex:none; display:grid; place-items:center"><span style="width:8px; height:8px; border-radius:50%; background:#fff"></span></span>
+    </button>
+    <button class="option">
+      <span class="iconchip sq"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V9l2-4h14l2 4v7"/><circle cx="7" cy="16" r="2"/><circle cx="17" cy="16" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Cab XL</div><div class="t2">Fits 4 big bags · Bay 14</div></div>
+      <div class="price">₹690</div>
+      <span style="width:22px; height:22px; border-radius:50%; border:1.5px solid var(--line-strong); margin-left:10px; flex:none"></span>
+    </button>
+    <button class="option disabled" disabled>
+      <span class="iconchip sq"><svg class="i i-20 i-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V9h14l4 3v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <div class="texts"><div class="t1">Auto</div><div class="t2">Not available: 3 big bags won't fit</div></div>
+      <div class="price" style="color:var(--ink-faint)">₹420</div>
+      <span style="width:22px; height:22px; border-radius:50%; border:1.5px solid var(--line-strong); margin-left:10px; flex:none"></span>
+    </button>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>Done</button></div>
+  </aside>
+
+  <!-- X20 Pool didn't fill -->
+  <aside class="sheet" data-sheet-screen="X20" role="dialog" aria-modal="true" aria-labelledby="x20-t" data-no-scrim-close hidden>
+    <div class="grabber"></div>
+    <div style="margin:4px 0 10px"><span class="iconchip accent" style="width:48px; height:48px"><svg class="i i-20 i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span></div>
+    <h2 id="x20-t">Your pool didn't fill</h2>
+    <div class="sub">No one else from AI 864 is going your way. We switched you to a solo auto.</div>
+    <div class="breakdown" style="margin-top:4px">
+      <div class="ln"><span class="k">You paid</span><span class="v">₹380</span></div>
+      <div class="ln"><span class="k">Solo auto fare</span><span class="v">₹420</span></div>
+      <div class="ln tot"><span class="k">You pay more</span><span class="v">₹0</span></div>
+    </div>
+    <div class="sheet-footer"><button class="btn btn-primary" data-close>OK</button></div>
+  </aside>
+
+  <!-- MLogout confirm dialog -->
+  <aside class="dialog" data-sheet-screen="MLogout" role="dialog" aria-modal="true" aria-labelledby="mlogout-t" hidden>
+    <h3 id="mlogout-t">Log out?</h3>
+    <p>You'll need to sign in again next time.</p>
+    <div class="btns">
+      <button class="btn btn-primary" data-close>Keep me signed in</button>
+      <button class="btn btn-secondary" data-go="A1">Log out</button>
+    </div>
+  </aside>
+
+  <!-- X2 Bags taking long -->
+  <aside class="sheet" data-sheet-screen="X2" role="dialog" aria-modal="true" aria-labelledby="x2-t" hidden>
+    <div class="grabber"></div>
+    <div class="big-ico"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span></div>
+    <h2 id="x2-t">Bags taking long?</h2>
+    <div class="sub">No rush. We call your auto only when you tap "I have my bags". Nobody is waiting for you yet, so there is no charge.</div>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-close>OK, I'll wait</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-go="M3">My bag is lost</button>
+    </div>
+  </aside>
+
+  <!-- X3 Skip Santosh? (dialog) -->
+  <aside class="dialog" data-sheet-screen="X3" role="dialog" aria-modal="true" aria-labelledby="x3-t" hidden>
+    <h3 id="x3-t">Skip Santosh?</h3>
+    <p>Your fare stays ₹420. We give you the next auto in the T2 queue. You can skip only once.</p>
+    <div class="btns">
+      <button class="btn btn-primary" data-go="X4b">Skip, show next auto</button>
+      <button class="btn btn-secondary" data-close>Keep Santosh</button>
+    </div>
+  </aside>
+
+  <!-- X4 Driver cancelled (sheet, no scrim close) -->
+  <aside class="sheet" data-sheet-screen="X4" role="dialog" aria-modal="true" aria-labelledby="x4-t" data-no-scrim-close hidden>
+    <div class="grabber"></div>
+    <div style="margin:4px 0 10px"><span class="iconchip accent" style="width:48px; height:48px"><svg class="i i-20 i-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span></div>
+    <h2 id="x4-t">Santosh cancelled</h2>
+    <div class="sub">Not your fault. The next auto from the T2 queue is coming for you.</div>
+    <div style="margin-top:4px">
+      <div class="row" style="padding:12px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M4 11h16"/><circle cx="17" cy="15" r="1.5" fill="currentColor"/></svg></span><div class="texts"><div class="t1">₹42 back to you</div><div class="t2">His cancellation fee is paid to you</div></div></div>
+      <div class="row" style="padding:12px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div class="texts"><div class="t1">Same fare: ₹420</div><div class="t2">No new booking, no extra cost</div></div></div>
+      <div class="row" style="padding:12px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><div class="texts"><div class="t1">On his record</div><div class="t2">His cancel is logged in the T2 register</div></div></div>
+    </div>
+    <div class="sheet-footer"><button class="btn btn-primary" data-go="X4b">See your new driver</button></div>
+  </aside>
+
+  <!-- X8 Cancel (no driver yet) · dialog -->
+  <aside class="dialog" data-sheet-screen="X8" role="dialog" aria-modal="true" aria-labelledby="x8-t" hidden>
+    <h3 id="x8-t">Cancel this ride?</h3>
+    <p>No driver is assigned yet, so it's free. ₹420 goes back to your UPI.</p>
+    <div class="btns">
+      <button class="btn btn-primary" data-close>Keep my ride</button>
+      <button class="btn btn-secondary" data-go="B1">Yes, cancel</button>
+    </div>
+  </aside>
+
+  <!-- X9 Cancel (driver assigned) · sheet -->
+  <aside class="sheet" data-sheet-screen="X9" role="dialog" aria-modal="true" aria-labelledby="x9-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="x9-t">Cancel your ride?</h2>
+    <div class="sub">Santosh is already at Bay 12 waiting for you.</div>
+    <div class="breakdown" style="margin-top:4px">
+      <div class="ln"><span class="k">Cancellation fee</span><span class="v">₹42</span></div>
+      <div class="ln tot"><span class="k">Back to your UPI</span><span class="v">₹378</span></div>
+    </div>
+    <p class="t-foot" style="margin:10px 2px 0">Fee is 10% of the fare, up to ₹100 (Maharashtra 2026 cab rules). It goes to the driver.</p>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-close>Keep my ride</button>
+      <button class="btn btn-secondary" style="margin-top:8px" data-go="B1">Yes, cancel</button>
+    </div>
+  </aside>
+
+  <!-- X10 This isn't my auto · dialog -->
+  <aside class="dialog" data-sheet-screen="X10" role="dialog" aria-modal="true" aria-labelledby="x10-t" hidden>
+    <div class="icon-head"><span class="circle circle-ink"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 18H2L12 2z"/><path d="M12 10v4M12 17h.01"/></svg></span></div>
+    <h3 id="x10-t">Don't get in</h3>
+    <p>Your auto is MH 02 AB 1234, black and yellow, driven by Santosh. Check the plate before you load bags.</p>
+    <div class="btns">
+      <button class="btn btn-primary" data-close data-toast="This would open your phone's dialler"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l3-1 2 5-2 1a10 10 0 0 0 5 5l1-2 5 2-1 3a3 3 0 0 1-3 2A14 14 0 0 1 3 7a3 3 0 0 1 2-3z"/></svg>Call Santosh</button>
+      <button class="btn btn-secondary" data-sheet="X12">Get help</button>
+    </div>
+  </aside>
+
+  <!-- X11 Driver asked for extra money -->
+  <aside class="sheet" data-sheet-screen="X11" role="dialog" aria-modal="true" aria-labelledby="x11-t" hidden>
+    <div class="grabber"></div>
+    <div style="margin:4px 0 10px"><span class="iconchip ink" style="width:48px; height:48px"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+    <h2 id="x11-t">You owe nothing more</h2>
+    <div class="sub">₹420 is already paid. It covers tolls, parking and your bags. Please don't pay cash.</div>
+    <div style="margin-top:4px">
+      <div class="row" style="padding:12px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><div class="texts"><div class="t1">Logged on Santosh's record</div><div class="t2">In the T2 register, with time and place</div></div></div>
+      <div class="row" style="padding:12px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l3-1 2 5-2 1a10 10 0 0 0 5 5l1-2 5 2-1 3a3 3 0 0 1-3 2A14 14 0 0 1 3 7a3 3 0 0 1 2-3z"/></svg></span><div class="texts"><div class="t1">Our team is calling him now</div><div class="t2">Your trip goes on at ₹420</div></div></div>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn btn-primary" data-close>OK, continue trip</button>
+      <button class="btn-link quiet" style="margin-top:4px" data-sheet="X12">I feel unsafe</button>
+    </div>
+  </aside>
+
+  <!-- X12 SOS -->
+  <aside class="sheet" data-sheet-screen="X12" role="dialog" aria-modal="true" aria-labelledby="x12-t" hidden>
+    <div class="grabber"></div>
+    <h2 id="x12-t">Need help now?</h2>
+    <div class="sheet-footer" style="margin-top:4px">
+      <button class="btn btn-sos" data-close data-toast="Calling 112 would open your phone's dialler">
+        <svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M5 4l3-1 2 5-2 1a10 10 0 0 0 5 5l1-2 5 2-1 3a3 3 0 0 1-3 2A14 14 0 0 1 3 7a3 3 0 0 1 2-3z"/></svg>
+        Call 112 · Police
+      </button>
+    </div>
+    <div style="margin-top:16px">
+      <div class="row" style="padding:14px 0"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg></span><div class="texts"><div class="t1">Mom is following your trip</div><div class="t2">Live location and auto number</div></div><span style="width:28px; height:28px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; flex:none"><svg class="i i-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <button class="row" style="padding:14px 0; width:100%" data-close data-toast="Safety team would be called"><span class="iconchip"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="texts"><div class="t1">Call our safety team</div><div class="t2">Open all day and night</div></div><svg class="i i-20 i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <button class="btn-link quiet" style="margin-top:8px; width:auto; justify-content:flex-start" data-close>Close</button>
+  </aside>
+
+  <!-- X13 Payment failed · dialog -->
+  <aside class="dialog" data-sheet-screen="X13" role="dialog" aria-modal="true" aria-labelledby="x13-t" hidden>
+    <div class="icon-head"><span class="circle" style="background:var(--bg-surface); color:var(--ink)"><svg class="i i-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div>
+    <h3 id="x13-t">Payment didn't go through</h3>
+    <p>No money was taken. Try again, or pick another UPI app.</p>
+    <div class="btns">
+      <button class="btn btn-primary" data-go="B5">Try again</button>
+      <button class="btn btn-secondary" data-go="B3">Change UPI app</button>
+    </div>
+  </aside>
+
+</div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>
